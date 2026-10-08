@@ -233,8 +233,21 @@ function Homepage() {
     <main id="top" className="min-h-screen bg-background pt-[var(--site-header-height,81px)] text-foreground selection:bg-primary/30 selection:text-primary">
       <SiteHeader />
 
-      <section aria-label="Real Estate Forever film" className="border-t border-border bg-background">
-        <video poster={homeMainPoster.url} controls autoPlay muted loop playsInline preload="auto" aria-label="Real Estate Forever main film" className="block aspect-video w-full object-contain">
+      <section
+        aria-label="Real Estate Forever film"
+        className="flex h-[calc(100vh-var(--site-header-height,81px))] sm:h-[calc(100dvh-var(--site-header-height,81px))] w-full items-center justify-center overflow-hidden border-t border-border bg-black/95"
+      >
+        <video
+          poster={homeMainPoster.url}
+          controls
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          aria-label="Real Estate Forever main film"
+          className="block h-auto max-h-full w-auto max-w-full aspect-video object-contain shadow-2xl"
+        >
           <source src={homeMainWebm.url} type="video/webm" />
           <source src={homeMainVideo.url} type="video/mp4" />
         </video>

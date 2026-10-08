@@ -211,6 +211,9 @@ export function SiteHeader({ home = "" }: { home?: string }) {
           aria-label="Primary navigation"
           className="hidden items-center justify-center gap-6 text-[14px] font-bold uppercase tracking-[0.16em] text-foreground lg:flex xl:gap-8"
         >
+          <a href={`${home}#about`} className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+            ABOUT US
+          </a>
           <Link to="/inventory" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
             INVENTORY
           </Link>
@@ -238,6 +241,13 @@ export function SiteHeader({ home = "" }: { home?: string }) {
           aria-label="Mobile navigation"
           className="grid border-t border-foreground/15 bg-background px-5 py-3 text-[15px] font-semibold uppercase text-foreground shadow-xl lg:hidden"
         >
+          <a
+            href={`${home}#about`}
+            onClick={() => setMenuOpen(false)}
+            className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
+          >
+            About Us
+          </a>
           <Link
             to="/inventory"
             onClick={() => setMenuOpen(false)}

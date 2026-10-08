@@ -1,7 +1,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
-const TO = "info@realestateforever.com";
+const DEFAULT_CLIENT_EMAIL = "info@realestateforever.com";
+const CHATBOT_DESTINATION_EMAIL = "ullashsoftvence@gmail.com";
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_mail/gmail/v1";
 const LOGO_CID = "real-estate-forever-logo";
 const SENDER_NAME = "Real Estate Forever";
@@ -27,6 +28,10 @@ export const sendFormEmail = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const isHero = data.form === "hero";
     const isChatbot = data.form === "chatbot";
+    const TO = isChatbot
+      ? (process.env["CHATBOT_EMAIL"] || CHATBOT_DESTINATION_EMAIL)
+      : (process.env["CLIENT_EMAIL"] || DEFAULT_CLIENT_EMAIL);
+
     const title = isChatbot
       ? "New Chatbot Inquiry"
       : isHero
@@ -80,22 +85,10 @@ export const sendFormEmail = createServerFn({ method: "POST" })
             ["Message", data.message],
           ];
 
+    const resendKey = process.env["RESEND_API_KEY"];
     const lovableKey = process.env["LOVABLE_API_KEY"];
     const gmailKey = process.env["GOOGLE_MAIL_API_KEY"];
-    if (!lovableKey || !gmailKey) {
-      console.log(`[mail] Inbound inquiry routed to ${TO}:`, {
-        destination: TO,
-        subject: subjectLine,
-        name: data.name,
-        email: data.email,
-        property: data.property,
-        inquiry: data.message,
-        source: formLabel,
-        date: `${submittedAt} ET`,
-        conversationContext: data.conversationContext,
-      });
-      return { ok: true, error: "" };
-    }
+
     const html = `<!doctype html>
 <html lang="en">
   <head>
@@ -163,25 +156,73 @@ export const sendFormEmail = createServerFn({ method: "POST" })
       .replace(/\+/g, "-")
       .replace(/\//g, "_")
       .replace(/=+$/, "");
-    try {
-      const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${lovableKey}`,
-          "X-Connection-Api-Key": gmailKey,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ raw }),
-      });
-      if (!res.ok) {
+    // 1. If Resend API Key is configured (ideal for Vercel deployment)
+    if (resendKey) {
+      try {
+        const res = await fetch("https://api.resend.com/emails", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${resendKey}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            from: "Real Estate Forever <onboarding@resend.dev>",
+            to: [TO],
+            reply_to: data.email || undefined,
+            subject: subjectLine,
+            html: html,
+          }),
+        });
+        if (res.ok) {
+          console.log(`[mail] Inquiry email successfully delivered via Resend to ${TO}`);
+          return { ok: true, error: "" };
+        }
         const body = await res.text();
-        console.error(`[mail] Gmail send failed [${res.status}]: ${body}`);
-        return { ok: false, error: `Gmail send failed [${res.status}]` };
+        console.error(`[mail] Resend dispatch failed [${res.status}]: ${body}`);
+        return { ok: false, error: `Resend dispatch failed [${res.status}]` };
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.error("[mail] Resend exception:", msg);
+        return { ok: false, error: msg };
       }
-    } catch (e) {
-      const msg = e instanceof Error ? e.message : String(e);
-      console.error("[mail] send failed:", msg);
-      return { ok: false, error: msg };
     }
+
+    // 2. If Lovable / Gmail Gateway is configured
+    if (lovableKey && gmailKey) {
+      try {
+        const res = await fetch(`${GATEWAY_URL}/users/me/messages/send`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${lovableKey}`,
+            "X-Connection-Api-Key": gmailKey,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ raw }),
+        });
+        if (!res.ok) {
+          const body = await res.text();
+          console.error(`[mail] Gmail send failed [${res.status}]: ${body}`);
+          return { ok: false, error: `Gmail send failed [${res.status}]` };
+        }
+        return { ok: true, error: "" };
+      } catch (e) {
+        const msg = e instanceof Error ? e.message : String(e);
+        console.error("[mail] Gmail send failed:", msg);
+        return { ok: false, error: msg };
+      }
+    }
+
+    // 3. Development / Sandbox fallback logger
+    console.log(`[mail] Inbound inquiry routed to ${TO}:`, {
+      destination: TO,
+      subject: subjectLine,
+      name: data.name,
+      email: data.email,
+      property: data.property,
+      inquiry: data.message,
+      source: formLabel,
+      date: `${submittedAt} ET`,
+      conversationContext: data.conversationContext,
+    });
     return { ok: true, error: "" };
   });

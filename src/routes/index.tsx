@@ -259,10 +259,6 @@ function Homepage() {
             <img src={aboutOffice} alt="Modern office meeting room" loading="lazy" className="h-auto w-full object-contain" />
           </div>
           <div>
-            <h2 className="mb-8 max-w-2xl text-balance font-display text-[2rem] leading-[1.06] sm:mb-10 sm:text-5xl md:text-[3.25rem]">
-              <span className="gold-text-sheen font-semibold tracking-wide drop-shadow-[0_2px_14px_rgba(190,149,67,0.25)]">BUILD WEALTH!</span>
-              <span className="mt-3 block text-[1.35rem] font-normal italic leading-snug text-foreground/95 sm:text-3xl md:text-[2rem] drop-shadow-sm">AN EXCEPTIONAL &amp; ELEGANT WAY OF LIFE TO THE TOP!</span>
-            </h2>
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] text-primary">Real Estate Forever</p>
             <h2 className="font-display text-4xl sm:text-5xl tracking-[-0.02em] text-foreground drop-shadow-sm">About Us</h2>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground/90">A real estate investment and development firm. We curate property and investment opportunities for buyers looking beyond the ordinary.</p>

@@ -188,25 +188,18 @@ export function LuxuryConcierge() {
       }
       setVisitorEmail(text);
 
-      // Check if visitor has already provided an inquiry question
-      if (visitorInquiry) {
-        setLeadStage("submitting");
-        setTimeout(() => {
-          submitLead(visitorName, text, visitorInquiry, detectedProperty);
-        }, 400);
-      } else {
-        setLeadStage("asking_message");
-        setTimeout(() => {
-          addMessage("bot", "Please tell us a little about your inquiry.");
-        }, 400);
-      }
+      const effectiveInquiry = visitorInquiry.trim() || "Private Real Estate Inquiry";
+      setLeadStage("submitting");
+      setTimeout(() => {
+        submitLead(visitorName || "Website Visitor", text, effectiveInquiry, detectedProperty);
+      }, 300);
       return;
     }
 
     // Step 3: In the middle of collecting inquiry message
     if (leadStage === "asking_message") {
       setVisitorInquiry(text);
-      submitLead(visitorName, visitorEmail, text, detectedProperty);
+      submitLead(visitorName || "Website Visitor", visitorEmail, text, detectedProperty);
       return;
     }
 
@@ -237,7 +230,11 @@ export function LuxuryConcierge() {
   // Direct action chip click
   const handleQuickChip = (promptText: string) => {
     addMessage("user", promptText);
-    const { response } = getKnowledgeResponse(promptText);
+    setVisitorInquiry(promptText);
+    const { response, propName } = getKnowledgeResponse(promptText);
+    if (propName) {
+      setDetectedProperty(propName);
+    }
     setTimeout(() => {
       addMessage("bot", response);
       setTimeout(() => {

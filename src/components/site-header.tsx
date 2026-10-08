@@ -73,7 +73,7 @@ function MarketClocks() {
               <svg
                 viewBox="0 0 72 72"
                 aria-hidden="true"
-                className="size-full overflow-visible drop-shadow-[0_0_5px_color-mix(in_oklab,var(--color-primary)_45%,transparent)]"
+                className="size-full overflow-visible drop-shadow-[0_2px_10px_rgba(190,149,67,0.4)]"
               >
                 <circle
                   cx="36"
@@ -142,13 +142,13 @@ function MarketClocks() {
                 <circle cx="36" cy="36" r="1.8" fill="currentColor" className="text-primary" />
               </svg>
             </div>
-            <span className="mt-2 whitespace-nowrap font-display text-[11px] font-semibold uppercase leading-none text-primary xl:text-[13px]">
+            <span className="mt-2 whitespace-nowrap font-display text-[11px] font-semibold uppercase tracking-[0.08em] leading-none text-primary drop-shadow-[0_1px_3px_rgba(190,149,67,0.25)] xl:text-[13px]">
               {market.city}
             </span>
             <time
               dateTime={now?.toISOString()}
               aria-label={clock ? `${clock.digital} in ${market.city}` : market.city}
-              className="mt-1.5 whitespace-nowrap font-sans text-[10px] font-medium leading-none text-foreground/90 xl:text-[12px]"
+              className="mt-1.5 whitespace-nowrap font-sans text-[10px] font-medium tracking-wider leading-none text-foreground/90 xl:text-[12px]"
             >
               {clock ? `${clock.short} ${clock.period}` : "--:-- --"}
             </time>
@@ -189,7 +189,7 @@ export function SiteHeader({ home = "" }: { home?: string }) {
   return (
     <header
       ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 border-b border-foreground/15 bg-background/95 shadow-lg shadow-background/40 backdrop-blur-xl"
+      className="fixed inset-x-0 top-0 z-50 border-b border-primary/20 bg-background/90 shadow-[0_8px_32px_rgba(0,0,0,0.75)] backdrop-blur-2xl"
     >
       <div
         ref={barRef}
@@ -209,12 +209,12 @@ export function SiteHeader({ home = "" }: { home?: string }) {
         </Link>
         <nav
           aria-label="Primary navigation"
-          className="hidden items-center justify-center gap-4 text-[16px] font-semibold uppercase text-foreground lg:flex xl:gap-[28px]"
+          className="hidden items-center justify-center gap-6 text-[14px] font-bold uppercase tracking-[0.16em] text-foreground lg:flex xl:gap-8"
         >
-          <Link to="/inventory" className="transition-colors hover:text-primary">
+          <Link to="/inventory" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
             INVENTORY
           </Link>
-          <a href={`${home}#contact`} className="transition-colors hover:text-primary">
+          <a href={`${home}#contact`} className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
             CONTACT US
           </a>
         </nav>
@@ -227,7 +227,7 @@ export function SiteHeader({ home = "" }: { home?: string }) {
             aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((open) => !open)}
-            className="rounded-none border border-foreground/20 text-foreground hover:bg-card hover:text-primary lg:hidden"
+            className="rounded-md border border-primary/30 text-foreground hover:border-primary hover:bg-primary/10 hover:text-primary lg:hidden"
           >
             {menuOpen ? <X /> : <Menu />}
           </Button>

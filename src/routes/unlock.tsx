@@ -38,20 +38,72 @@ function Unlock() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
     setPassword("");
     setError(false);
-  }, []);
 
-  const toggleSound = () => {
     const video = videoRef.current;
     if (!video) return;
-    video.muted = !video.muted;
-    setMuted(video.muted);
-    void video.play().catch(() => undefined);
+
+    const syncVolumeState = () => {
+      setMuted(video.muted);
+    };
+    video.addEventListener("volumechange", syncVolumeState);
+
+    // Attempt unmuted playback initially
+    video.muted = false;
+    const playPromise = video.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setMuted(video.muted);
+        })
+        .catch(() => {
+          // If browser blocks unmuted autoplay, play muted first
+          video.muted = true;
+          setMuted(true);
+          void video.play().catch(() => undefined);
+
+          // Unmute on the first user interaction anywhere on page (except clicking the mute button)
+          const enableSound = (e?: Event) => {
+            if (e && (e.target as HTMLElement)?.closest?.("button")) return;
+            if (video) {
+              video.muted = false;
+              setMuted(false);
+              void video.play().catch(() => undefined);
+            }
+            cleanup();
+          };
+          const cleanup = () => {
+            window.removeEventListener("click", enableSound);
+            window.removeEventListener("keydown", enableSound);
+            window.removeEventListener("touchstart", enableSound);
+          };
+          window.addEventListener("click", enableSound);
+          window.addEventListener("keydown", enableSound);
+          window.addEventListener("touchstart", enableSound);
+        });
+    }
+
+    return () => {
+      video.removeEventListener("volumechange", syncVolumeState);
+    };
+  }, []);
+
+  const toggleSound = (e?: React.MouseEvent) => {
+    e?.preventDefault();
+    e?.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    const nextMuted = !video.muted;
+    video.muted = nextMuted;
+    setMuted(nextMuted);
+    if (!nextMuted) {
+      void video.play().catch(() => undefined);
+    }
   };
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -81,7 +133,10 @@ function Unlock() {
       <video
         ref={videoRef}
         autoPlay
-        muted
+        muted={muted}
+        onVolumeChange={() => {
+          if (videoRef.current) setMuted(videoRef.current.muted);
+        }}
         loop
         playsInline
         preload="auto"
@@ -96,7 +151,7 @@ function Unlock() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-background/50 via-transparent to-background/60" />
 
       <header className="flex h-20 shrink-0 items-center justify-between gap-4 px-5 sm:h-24 sm:px-10 lg:px-14">
-        <BrandLogo className="w-48 sm:w-60 md:w-72" />
+        <BrandLogo className="w-64 sm:w-80 md:w-96 lg:w-[420px]" />
         <Button
           type="button"
           variant="outline"
@@ -188,7 +243,10 @@ function Unlock() {
       </section>
 
       <footer className="flex shrink-0 flex-col items-center justify-between gap-2 px-5 py-5 text-[10px] uppercase text-foreground/70 sm:flex-row sm:px-10 sm:py-6 sm:text-[11px] lg:px-14">
-        <span>Info@RealEstateForever.com | Corporate Use Only</span>
+        <span className="normal-case tracking-normal">
+          <span className="font-medium text-foreground/90">Info@RealEstateForever.com</span>
+          <span className="uppercase text-foreground/60"> | CORPORATE USE ONLY</span>
+        </span>
         <div className="flex gap-5 sm:gap-8">
           <span>CONFIDENTIAL INVENTORY | SUBJECT TO CHANGE</span>
 

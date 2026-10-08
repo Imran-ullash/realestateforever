@@ -147,9 +147,15 @@ const testimonials = [
 export const Route = createFileRoute("/")({
   ssr: false,
   loader: async () => {
-    const content = await getComingSoonContent({ data: { token: getVisitToken() } });
-    if (!content.unlocked) throw redirect({ to: "/unlock" });
-    return content;
+    try {
+      const content = await getComingSoonContent({ data: { token: getVisitToken() } });
+      if (!content.unlocked) throw redirect({ to: "/unlock" });
+      return content;
+    } catch (err) {
+      if ((err as { to?: string })?.to) throw err;
+      console.error("[Route loader] error:", err);
+      throw redirect({ to: "/unlock" });
+    }
   },
   head: () => ({
     meta: [

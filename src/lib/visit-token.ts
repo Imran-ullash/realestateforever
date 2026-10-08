@@ -1,22 +1,48 @@
-// In-memory visit token. Resets every time the site is accessed, refreshed, or opened.
-// It is never persisted to cookies, sessionStorage, or localStorage, ensuring that
-// every site access requires entering the password.
+// Tab session visit token. Persists in sessionStorage for the duration
+// of the browser tab/session so users never get prompted for password
+// while navigating, waiting, or refreshing. Cleared automatically when the tab is closed.
+const TOKEN_KEY = "ref-visit-token-v2";
 let inMemoryToken = "";
 
-if (typeof window !== "undefined") {
-  try {
-    window.sessionStorage.removeItem("ref-visit-token");
-    window.localStorage.removeItem("ref-visit-token");
-  } catch {
-    /* ignore */
-  }
-}
-
 export function getVisitToken(): string {
-  return inMemoryToken;
+  if (inMemoryToken) return inMemoryToken;
+  if (typeof window !== "undefined") {
+    try {
+      const stored = window.sessionStorage.getItem(TOKEN_KEY);
+      if (stored) {
+        inMemoryToken = stored;
+        return stored;
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+  return "";
 }
 
 export function setVisitToken(token: string) {
   inMemoryToken = token;
+  if (typeof window !== "undefined") {
+    try {
+      if (token) {
+        window.sessionStorage.setItem(TOKEN_KEY, token);
+      } else {
+        window.sessionStorage.removeItem(TOKEN_KEY);
+      }
+    } catch {
+      /* ignore */
+    }
+  }
+}
+
+export function clearVisitToken() {
+  inMemoryToken = "";
+  if (typeof window !== "undefined") {
+    try {
+      window.sessionStorage.removeItem(TOKEN_KEY);
+    } catch {
+      /* ignore */
+    }
+  }
 }
 

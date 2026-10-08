@@ -6,8 +6,8 @@ import { createHash, randomBytes, timingSafeEqual } from "node:crypto";
 // the server stored at unlock time, and the visit is still within its time limits.
 type GateSession = { token?: string; issuedAt?: number; lastSeen?: number };
 
-const IDLE_LIMIT_MS = 30 * 60 * 1000; // 30 minutes without activity
-const ABSOLUTE_LIMIT_MS = 4 * 60 * 60 * 1000; // 4 hours maximum per visit
+const IDLE_LIMIT_MS = 12 * 60 * 60 * 1000; // 12 hours without activity
+const ABSOLUTE_LIMIT_MS = 24 * 60 * 60 * 1000; // 24 hours maximum per visit
 
 const DEFAULT_SESSION_SECRET = "c9b0e27a69f4d7b29a8f4c2e6d9b0e27a69f4d7b29a8f4c2e6d9b0e27a69f4d7";
 const DEFAULT_ACCESS_PASSWORD = "1111";
@@ -17,13 +17,13 @@ function getSessionConfig() {
 
   return {
     password,
-    // renamed to invalidate every earlier unlock session (v2 and before)
     name: "real-estate-forever-gate-v4",
     cookie: {
       httpOnly: true,
       secure: process.env["NODE_ENV"] === "production",
       sameSite: "lax" as const,
       path: "/",
+      maxAge: 24 * 60 * 60, // 24 hours
     },
   };
 }

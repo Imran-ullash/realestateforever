@@ -211,15 +211,27 @@ export function SiteHeader({ home = "" }: { home?: string }) {
           aria-label="Primary navigation"
           className="hidden items-center justify-center gap-6 text-[14px] font-bold uppercase tracking-[0.16em] text-foreground lg:flex xl:gap-8"
         >
-          <a href={`${home}#about`} className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
-            ABOUT US
-          </a>
+          {home ? (
+            <Link to="/" hash="about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+              ABOUT US
+            </Link>
+          ) : (
+            <a href="#about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+              ABOUT US
+            </a>
+          )}
           <Link to="/inventory" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
             INVENTORY
           </Link>
-          <a href={`${home}#contact`} className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
-            CONTACT US
-          </a>
+          {home ? (
+            <Link to="/" hash="contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+              CONTACT US
+            </Link>
+          ) : (
+            <a href="#contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+              CONTACT US
+            </a>
+          )}
         </nav>
         <div className="flex shrink-0 items-center justify-self-end gap-2 sm:gap-3">
           <MarketClocks />
@@ -241,13 +253,24 @@ export function SiteHeader({ home = "" }: { home?: string }) {
           aria-label="Mobile navigation"
           className="grid border-t border-foreground/15 bg-background px-5 py-3 text-[15px] font-semibold uppercase text-foreground shadow-xl lg:hidden"
         >
-          <a
-            href={`${home}#about`}
-            onClick={() => setMenuOpen(false)}
-            className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
-          >
-            About Us
-          </a>
+          {home ? (
+            <Link
+              to="/"
+              hash="about"
+              onClick={() => setMenuOpen(false)}
+              className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
+            >
+              About Us
+            </Link>
+          ) : (
+            <a
+              href="#about"
+              onClick={() => setMenuOpen(false)}
+              className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
+            >
+              About Us
+            </a>
+          )}
           <Link
             to="/inventory"
             onClick={() => setMenuOpen(false)}
@@ -255,13 +278,24 @@ export function SiteHeader({ home = "" }: { home?: string }) {
           >
             Inventory
           </Link>
-          <a
-            href={`${home}#contact`}
-            onClick={() => setMenuOpen(false)}
-            className="py-4 transition-colors hover:text-primary"
-          >
-            Contact Us
-          </a>
+          {home ? (
+            <Link
+              to="/"
+              hash="contact"
+              onClick={() => setMenuOpen(false)}
+              className="py-4 transition-colors hover:text-primary"
+            >
+              Contact Us
+            </Link>
+          ) : (
+            <a
+              href="#contact"
+              onClick={() => setMenuOpen(false)}
+              className="py-4 transition-colors hover:text-primary"
+            >
+              Contact Us
+            </a>
+          )}
         </nav>
       )}
     </header>

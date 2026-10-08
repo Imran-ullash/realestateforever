@@ -688,7 +688,7 @@ function Homepage() {
                 disabled={sending === "enquiry"}
                 className="luxury-btn-primary group mt-9 h-14 w-full rounded-lg text-[12px] font-bold uppercase tracking-[0.18em]"
               >
-                {sending === "enquiry" ? "Sending..." : "Send private enquiry"}{" "}
+                {sending === "enquiry" ? "Sending..." : "SUBMIT TO LEADERSHIP"}{" "}
                 <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
               </Button>
               {sentMsg?.form === "enquiry" && (

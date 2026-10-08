@@ -235,7 +235,7 @@ function Homepage() {
 
       <section
         aria-label="Real Estate Forever film"
-        className="flex h-[calc(100vh-var(--site-header-height,81px))] sm:h-[calc(100dvh-var(--site-header-height,81px))] w-full items-center justify-center overflow-hidden border-t border-border bg-black/95"
+        className="relative h-[calc(100vh-var(--site-header-height,81px))] sm:h-[calc(100dvh-var(--site-header-height,81px))] w-full overflow-hidden border-t border-border bg-black"
       >
         <video
           poster={homeMainPoster.url}
@@ -246,7 +246,7 @@ function Homepage() {
           playsInline
           preload="auto"
           aria-label="Real Estate Forever main film"
-          className="block h-auto max-h-full w-auto max-w-full aspect-video object-contain shadow-2xl"
+          className="size-full w-full object-cover object-center"
         >
           <source src={homeMainWebm.url} type="video/webm" />
           <source src={homeMainVideo.url} type="video/mp4" />
@@ -495,9 +495,8 @@ function Homepage() {
                   onClick={() => {
                     setStateFilter(s);
                   }}
-                  className={`h-9 rounded-md px-3.5 text-[11px] font-bold uppercase tracking-widest sm:h-10 sm:px-4.5 ${
-                    stateFilter === s ? "luxury-btn-primary" : "luxury-btn-outline"
-                  }`}
+                  className={`h-9 rounded-md px-3.5 text-[11px] font-bold uppercase tracking-widest sm:h-10 sm:px-4.5 ${stateFilter === s ? "luxury-btn-primary" : "luxury-btn-outline"
+                    }`}
                 >
                   {s === "All" ? "All States" : s}
                 </Button>

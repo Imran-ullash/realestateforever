@@ -159,12 +159,12 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "Real Estate Forever | Off-Market Marketplace" },
+      { title: "RealEstateForever.com | Real Estate Investments." },
       {
         name: "description",
         content: "The #1 marketplace for off-market real estate investors. AI-matched deals delivered daily.",
       },
-      { property: "og:title", content: "Real Estate Forever | Marketplace" },
+      { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
       { property: "og:description", content: "Exclusive access to off-market real estate investment properties." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },

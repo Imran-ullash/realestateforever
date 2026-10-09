@@ -27,9 +27,9 @@ export const Route = createFileRoute("/inventory")({
     return content;
   },
   head: () => ({ meta: [
-    { title: "Property Inventory | Real Estate Forever" },
+    { title: "RealEstateForever.com | Real Estate Investments." },
     { name: "description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
-    { property: "og:title", content: "Property Inventory | Real Estate Forever" },
+    { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
     { property: "og:description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
     { property: "og:type", content: "website" },
     { name: "twitter:card", content: "summary_large_image" },

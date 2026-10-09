@@ -80,7 +80,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Real Estate Forever" },
+      { title: "RealEstateForever.com | Real Estate Investments." },
       { name: "description", content: "Exceptional architecture and remarkable homes, curated for how you want to live." },
       { name: "author", content: "Real Estate Forever" },
       { property: "og:type", content: "website" },

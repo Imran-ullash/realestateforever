@@ -259,7 +259,10 @@ function Homepage() {
           <div>
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] text-primary">Real Estate Forever</p>
             <h2 className="font-display text-4xl sm:text-5xl tracking-[-0.02em] text-foreground drop-shadow-sm">About Us</h2>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-muted-foreground/90">A real estate investment and development firm. We curate property and investment opportunities for buyers looking beyond the ordinary.</p>
+            <p className="mt-4 max-w-3xl text-base leading-relaxed text-muted-foreground/90">
+              We are a small boutique real estate investment and development firm focused on<br className="hidden sm:inline" />{" "}
+              finding opportunity, creating lasting value, and building meaningful relationships.
+            </p>
             {sentMsg?.form === "hero" && (
               <p
                 role="status"

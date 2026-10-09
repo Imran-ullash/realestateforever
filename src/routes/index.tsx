@@ -23,10 +23,10 @@ import { BrandLogo } from "@/components/brand-logo";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { VehicleInventory } from "@/components/vehicle-inventory";
+import { AboutImageSlider } from "@/components/about-image-slider";
 import homeMainPoster from "@/assets/home-main-poster.jpg.asset.json";
 import homeMainVideo from "@/assets/home-main-video.mp4.asset.json";
 import homeMainWebm from "@/assets/home-main-video.webm.asset.json";
-import aboutOffice from "@/assets/about-office.png";
 import cleanFirstListing from "@/assets/home-listing-01.jpg";
 import clearPhoto05 from "@/assets/property-clear-05.jpg";
 import clearPhoto08 from "@/assets/property-clear-08.jpg";
@@ -255,9 +255,7 @@ function Homepage() {
 
       <section id="about" className="scroll-mt-[var(--site-header-height,81px)] border-t border-border bg-card/25">
         <div className="mx-auto grid max-w-[1600px] items-center gap-8 px-5 py-12 sm:px-6 lg:grid-cols-[1.2fr_1fr] md:gap-12 md:px-10 md:py-16">
-          <div className="overflow-hidden rounded-xl border border-primary/25 shadow-2xl shadow-black/80 ring-1 ring-white/5 transition-transform duration-700 hover:scale-[1.01]">
-            <img src={aboutOffice} alt="Modern office meeting room" loading="lazy" className="h-auto w-full object-contain" />
-          </div>
+          <AboutImageSlider />
           <div>
             <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.28em] text-primary">Real Estate Forever</p>
             <h2 className="font-display text-4xl sm:text-5xl tracking-[-0.02em] text-foreground drop-shadow-sm">About Us</h2>

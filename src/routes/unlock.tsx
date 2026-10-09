@@ -17,7 +17,7 @@ export const Route = createFileRoute("/unlock")({
     const ogImage = `https://realestateforever.com${ogImageAsset.url}`;
     return {
       meta: [
-        { title: "RealEstateForever.com | Real Estate Investments." },
+        { title: "RealEstateForever.com - Private access" },
         { name: "description", content: "Access only to exclusive private real estate investors." },
         { property: "og:title", content: "Access Only To Exclusive Private Real Estate Investors" },
         { property: "og:description", content: "Private access to Real Estate Forever." },

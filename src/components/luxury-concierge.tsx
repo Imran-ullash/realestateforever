@@ -2,6 +2,7 @@ import { useState, useRef, useEffect, type FormEvent } from "react";
 import { MessageSquare, X, Send, Sparkles, Shield, User, Mail, CheckCircle2, AlertCircle } from "lucide-react";
 import { sendFormEmail } from "@/lib/mail.functions";
 import { listings } from "@/data/listings";
+import talkLiveLogo from "@/assets/talk-live-logo.png";
 
 interface ChatMessage {
   id: string;
@@ -254,16 +255,30 @@ export function LuxuryConcierge() {
         <button
           type="button"
           onClick={() => setIsOpen(true)}
-          aria-label="Open AI Real Estate Assistant"
-          className="group relative flex items-center gap-2.5 rounded-full border border-primary/40 bg-background/90 px-4 py-3 text-foreground shadow-2xl shadow-primary/20 backdrop-blur-xl transition-all duration-300 hover:scale-105 hover:border-primary hover:shadow-primary/40 active:scale-95"
+          aria-label="Talk To Us Live"
+          className="group relative flex items-center gap-3 rounded-full border border-primary/70 bg-background/95 px-4.5 py-3 text-foreground shadow-[0_4px_24px_rgba(190,149,67,0.4),0_0_15px_rgba(0,0,0,0.85)] backdrop-blur-2xl transition-all duration-300 hover:scale-[1.05] hover:border-primary hover:shadow-[0_4px_35px_rgba(190,149,67,0.65),0_0_22px_rgba(0,0,0,0.95)] active:scale-95 sm:px-5 sm:py-3.5"
         >
-          <span className="relative flex size-2.5">
-            <span className="absolute inline-flex size-full animate-ping rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex size-2.5 rounded-full bg-primary" />
+          {/* Subtle gold glow shimmer ring */}
+          <span className="pointer-events-none absolute -inset-[1.5px] -z-10 rounded-full bg-gradient-to-r from-primary/30 via-primary/60 to-primary/30 opacity-75 blur-[3px] transition-opacity duration-300 group-hover:opacity-100" />
+
+          {/* Logo icon */}
+          <div className="relative flex size-7 shrink-0 items-center justify-center overflow-hidden rounded-md border border-primary/50 bg-black/85 shadow-inner">
+            <img
+              src={talkLiveLogo}
+              alt="Talk To Us Live Logo"
+              className="size-5 object-contain"
+            />
+          </div>
+
+          {/* Text */}
+          <span className="font-sans text-[12px] font-extrabold uppercase tracking-[0.16em] text-foreground transition-colors group-hover:text-primary sm:text-[13px]">
+            TALK TO US LIVE
           </span>
-          <MessageSquare className="size-4 text-primary transition-transform duration-300 group-hover:scale-110" />
-          <span className="font-sans text-[11px] font-bold uppercase tracking-[0.2em] text-foreground">
-            Inquire · AI Concierge
+
+          {/* Glowing live status dot */}
+          <span className="relative flex size-2.5 shrink-0">
+            <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-85" />
+            <span className="relative inline-flex size-2.5 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
           </span>
         </button>
       )}
@@ -279,15 +294,19 @@ export function LuxuryConcierge() {
           {/* Header */}
           <div className="flex shrink-0 items-center justify-between border-b border-primary/20 bg-card/65 px-4 py-3.5">
             <div className="flex items-center gap-2.5">
-              <div className="flex size-7 items-center justify-center rounded-full border border-primary/40 bg-primary/10 text-primary">
-                <Sparkles className="size-3.5" />
+              <div className="flex size-8 items-center justify-center overflow-hidden rounded-md border border-primary/40 bg-black/85">
+                <img
+                  src={talkLiveLogo}
+                  alt="Talk To Us Live Logo"
+                  className="size-6 object-contain"
+                />
               </div>
               <div>
                 <h3 className="font-display text-sm font-semibold leading-tight tracking-wide text-foreground">
-                  Real Estate Forever
+                  TALK TO US LIVE
                 </h3>
                 <p className="flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-widest text-primary">
-                  <span className="size-1.5 rounded-full bg-emerald-400" /> AI Real Estate Assistant
+                  <span className="size-1.5 rounded-full bg-emerald-400 shadow-[0_0_6px_#34d399]" /> Live Concierge Available
                 </p>
               </div>
             </div>

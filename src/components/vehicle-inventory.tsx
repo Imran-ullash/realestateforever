@@ -13,6 +13,10 @@ const tabs: { key: "all" | VehicleCategory; label: string }[] = [
 const money = (n: number | null) =>
   n == null ? "—" : n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
 
+// Toggle flags to show/hide fee and address (set to true to restore at any time)
+const SHOW_ENTRY_FEE = false;
+const SHOW_LOCATION = false;
+
 export function VehicleInventory() {
   const [items, setItems] = useState<Vehicle[] | null>(null);
   const [tab, setTab] = useState<"all" | VehicleCategory>("all");
@@ -94,15 +98,17 @@ export function VehicleInventory() {
                   </h3>
                   {v.subtitle && <p className="mt-1 truncate text-[13px] text-muted-foreground/80">{v.subtitle}</p>}
                 </div>
-                <div className="shrink-0 text-right">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/85 sm:text-[11px]">
-                    Entry
-                  </p>
-                  <p className="font-display text-xl font-medium text-primary sm:text-2xl drop-shadow-[0_1px_8px_rgba(190,149,67,0.3)]">{money(v.entryFee)}</p>
-                </div>
+                {SHOW_ENTRY_FEE && (
+                  <div className="shrink-0 text-right">
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/85 sm:text-[11px]">
+                      Entry
+                    </p>
+                    <p className="font-display text-xl font-medium text-primary sm:text-2xl drop-shadow-[0_1px_8px_rgba(190,149,67,0.3)]">{money(v.entryFee)}</p>
+                  </div>
+                )}
               </div>
 
-              {v.location && (
+              {SHOW_LOCATION && v.location && (
                 <p className="mt-4 flex items-center gap-2 text-[13px] text-muted-foreground/85">
                   <MapPin className="size-3.5 text-primary" />
                   {v.location}

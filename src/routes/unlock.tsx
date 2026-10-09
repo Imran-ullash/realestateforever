@@ -166,8 +166,8 @@ function Unlock() {
 
       <section className="flex flex-1 items-center justify-center px-5 py-8 sm:py-12">
         <div className="reveal-up flex w-full max-w-4xl translate-y-[3vh] flex-col items-center text-center sm:translate-y-[4vh] lg:translate-y-[5vh]">
-          <h1 className="max-w-3xl text-balance font-display text-5xl leading-[1.1] sm:text-5xl lg:text-5xl">
-            BUY MORE REAL ESTATE.<br className="hidden sm:block" /> THEY DO NOT MAKE MORE IT.
+          <h1 className="max-w-3xl text-balance font-display text-2xl sm:text-3xl md:text-4xl lg:text-5xl leading-tight sm:leading-[1.15] md:leading-[1.1] tracking-[-0.01em]">
+            BUY MORE REAL ESTATE.<br className="block" /> THEY DO NOT MAKE MORE IT.
           </h1>
 
           <div className="access-gold-frame mt-8 w-full max-w-[420px] rounded-lg border-2 border-primary bg-background/65 p-6 backdrop-blur-md sm:mt-10 sm:p-8">

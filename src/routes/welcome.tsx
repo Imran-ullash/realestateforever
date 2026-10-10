@@ -38,10 +38,11 @@ function Welcome() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [muted, setMuted] = useState(false);
+  const [muted, setMuted] = useState(true);
+  const [waitingForGesture, setWaitingForGesture] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const soundPlayCountRef = useRef(0);
-  const manualOverrideRef = useRef(false);
+  const lastCycleTimeRef = useRef(0);
 
   useEffect(() => {
     setPassword("");
@@ -50,18 +51,25 @@ function Welcome() {
     const video = videoRef.current;
     if (!video) return;
 
-    const syncVolumeState = () => {
-      setMuted(video.muted);
+    let cleanupInteractionListeners: (() => void) | null = null;
+
+    const onCycleComplete = () => {
+      const now = Date.now();
+      // Video duration is ~59.3s; debounce by 25s so ended + timeupdate cannot double count
+      if (now - lastCycleTimeRef.current < 25000) return;
+      lastCycleTimeRef.current = now;
+
+      soundPlayCountRef.current += 1;
+      if (soundPlayCountRef.current >= 2) {
+        // Completed 2 full soundtrack plays: mute audio and loop video silently
+        video.muted = true;
+        setMuted(true);
+      }
     };
-    video.addEventListener("volumechange", syncVolumeState);
 
     const handleEnded = () => {
-      if (!video.muted && !manualOverrideRef.current) {
-        soundPlayCountRef.current += 1;
-        if (soundPlayCountRef.current >= 2) {
-          video.muted = true;
-          setMuted(true);
-        }
+      if (!video.muted) {
+        onCycleComplete();
       }
       video.currentTime = 0;
       void video.play().catch(() => undefined);
@@ -69,78 +77,117 @@ function Welcome() {
 
     let lastTime = 0;
     const handleTimeUpdate = () => {
-      // In case video seeks to start or loops internally
-      if (video.currentTime < lastTime - 1 && lastTime > 1) {
-        if (!video.muted && !manualOverrideRef.current) {
-          soundPlayCountRef.current += 1;
-          if (soundPlayCountRef.current >= 2) {
-            video.muted = true;
-            setMuted(true);
-          }
+      // In case video loops internally without triggering ended, or seeks from >50s back to <2s
+      if (lastTime > 50 && video.currentTime < 2) {
+        if (!video.muted) {
+          onCycleComplete();
         }
       }
       lastTime = video.currentTime;
     };
 
+    const handleVolumeChange = () => {
+      setMuted(video.muted);
+    };
+
     video.addEventListener("ended", handleEnded);
     video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("volumechange", handleVolumeChange);
+
+    const startUnmutedPlayback = () => {
+      video.muted = false;
+      video.volume = 1;
+      video.currentTime = 0;
+      soundPlayCountRef.current = 0;
+      lastCycleTimeRef.current = Date.now();
+      setMuted(false);
+      setWaitingForGesture(false);
+      void video.play().catch(() => {
+        video.muted = true;
+        setMuted(true);
+      });
+    };
+
+    const handleUserGesture = () => {
+      if (cleanupInteractionListeners) {
+        cleanupInteractionListeners();
+        cleanupInteractionListeners = null;
+      }
+      startUnmutedPlayback();
+    };
+
+    const setupUserGestureListeners = () => {
+      window.addEventListener("pointerdown", handleUserGesture, true);
+      window.addEventListener("touchstart", handleUserGesture, true);
+      window.addEventListener("click", handleUserGesture, true);
+      window.addEventListener("keydown", handleUserGesture, true);
+
+      cleanupInteractionListeners = () => {
+        window.removeEventListener("pointerdown", handleUserGesture, true);
+        window.removeEventListener("touchstart", handleUserGesture, true);
+        window.removeEventListener("click", handleUserGesture, true);
+        window.removeEventListener("keydown", handleUserGesture, true);
+      };
+    };
 
     // Attempt unmuted playback initially
     video.muted = false;
+    video.volume = 1;
     const playPromise = video.play();
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
-          setMuted(video.muted);
+          // Browser allowed unmuted autoplay!
+          setMuted(false);
+          setWaitingForGesture(false);
+          lastCycleTimeRef.current = Date.now();
+          soundPlayCountRef.current = 0;
         })
         .catch(() => {
-          // If browser blocks unmuted autoplay, play muted first
+          // Browser blocked unmuted autoplay due to policy (Chrome/Safari default).
+          // Play muted so background visual runs, and prompt/listen for first interaction.
           video.muted = true;
           setMuted(true);
+          setWaitingForGesture(true);
           void video.play().catch(() => undefined);
-
-          // Turn sound on upon first interaction if user hasn't manually overridden
-          const enableSound = (e?: Event) => {
-            if (e && (e.target as HTMLElement)?.closest?.("button")) return;
-            if (video && !manualOverrideRef.current) {
-              video.muted = false;
-              setMuted(false);
-              soundPlayCountRef.current = 0;
-              void video.play().catch(() => undefined);
-            }
-            cleanupInteraction();
-          };
-          const cleanupInteraction = () => {
-            window.removeEventListener("click", enableSound);
-            window.removeEventListener("keydown", enableSound);
-            window.removeEventListener("touchstart", enableSound);
-            window.removeEventListener("pointerdown", enableSound);
-          };
-          window.addEventListener("click", enableSound);
-          window.addEventListener("keydown", enableSound);
-          window.addEventListener("touchstart", enableSound);
-          window.addEventListener("pointerdown", enableSound);
+          setupUserGestureListeners();
         });
     }
 
     return () => {
       video.removeEventListener("ended", handleEnded);
       video.removeEventListener("timeupdate", handleTimeUpdate);
-      video.removeEventListener("volumechange", syncVolumeState);
+      video.removeEventListener("volumechange", handleVolumeChange);
+      if (cleanupInteractionListeners) {
+        cleanupInteractionListeners();
+      }
     };
   }, []);
 
   const toggleSound = (e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
-    manualOverrideRef.current = true;
     const video = videoRef.current;
     if (!video) return;
-    const nextMuted = !video.muted;
-    video.muted = nextMuted;
-    setMuted(nextMuted);
-    if (!nextMuted) {
-      void video.play().catch(() => undefined);
+
+    if (video.muted) {
+      // Unmute and start 2 full cycles from the start
+      video.muted = false;
+      video.volume = 1;
+      video.currentTime = 0;
+      soundPlayCountRef.current = 0;
+      lastCycleTimeRef.current = Date.now();
+      setMuted(false);
+      setWaitingForGesture(false);
+      void video.play().catch(() => {
+        video.muted = true;
+        setMuted(true);
+      });
+    } else {
+      // Mute audio
+      video.muted = true;
+      setMuted(true);
+      setWaitingForGesture(false);
     }
   };
 
@@ -179,7 +226,11 @@ function Welcome() {
           size="icon"
           onClick={toggleSound}
           aria-label={muted ? "Play introduction film with sound" : "Mute introduction film"}
-          className="rounded-full border-foreground/30 bg-background/30 text-foreground backdrop-blur-sm hover:border-primary hover:bg-primary hover:text-primary-foreground"
+          className={`rounded-full backdrop-blur-sm transition-all ${
+            !muted
+              ? "border-primary bg-primary/20 text-primary shadow-lg shadow-primary/30 hover:bg-primary hover:text-primary-foreground"
+              : "border-foreground/30 bg-background/30 text-foreground hover:border-primary hover:bg-primary hover:text-primary-foreground"
+          }`}
         >
           {muted ? <VolumeX className="size-4" /> : <Volume2 className="size-4" />}
         </Button>
@@ -197,9 +248,6 @@ function Welcome() {
         ref={videoRef}
         autoPlay
         muted={muted}
-        onVolumeChange={() => {
-          if (videoRef.current) setMuted(videoRef.current.muted);
-        }}
         playsInline
         preload="auto"
         poster={mainVideoPoster.url}
@@ -207,8 +255,8 @@ function Welcome() {
         onClick={toggleSound}
         className="order-3 relative my-3 mx-auto w-[calc(100%-2.5rem)] max-w-md aspect-video cursor-pointer rounded-xl border border-primary/35 object-cover shadow-2xl shadow-black/80 sm:order-none sm:my-0 sm:mx-auto sm:w-full sm:h-full sm:size-full sm:max-w-none sm:cursor-default sm:aspect-auto sm:rounded-none sm:border-0 sm:shadow-none sm:absolute sm:inset-0 sm:-z-20 sm:object-contain sm:object-center sm:pointer-events-none"
       >
-        <source src={mainVideoWebm.url} type="video/webm" />
         <source src={mainVideo.url} type="video/mp4" />
+        <source src={mainVideoWebm.url} type="video/webm" />
       </video>
 
       {/* Section with Login Box */}
@@ -308,6 +356,18 @@ function Welcome() {
           CONFIDENTIAL INVENTORY | SUBJECT TO CHANGE | © 2026
         </span>
       </footer>
+
+      {waitingForGesture && (
+        <button
+          type="button"
+          onClick={toggleSound}
+          className="fixed bottom-20 sm:bottom-8 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 rounded-full border border-primary/60 bg-background/90 px-5 py-2.5 text-[11px] sm:text-xs font-semibold tracking-widest uppercase text-primary shadow-2xl backdrop-blur-md transition-all hover:scale-105 hover:bg-primary hover:text-primary-foreground active:scale-95 animate-pulse"
+          aria-label="Click anywhere to enable soundtrack"
+        >
+          <Volume2 className="size-4 animate-bounce" />
+          <span>Click anywhere for sound</span>
+        </button>
+      )}
     </main>
   );
 }

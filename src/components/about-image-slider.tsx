@@ -1,30 +1,30 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import aboutOffice from "@/assets/about-office.png";
 import aboutOfficeSlide1 from "@/assets/about-office-slide-1.jpg";
 import aboutOfficeSlide2 from "@/assets/about-office-slide-2.jpg";
 import aboutOfficeSlide3 from "@/assets/about-office-slide-3.jpg";
+import aboutOfficeSlide4 from "@/assets/about-office-slide-4.jpg";
 
 const SLIDES = [
   {
-    src: aboutOffice,
-    alt: "UNIQQ Real Estate executive boardroom",
-    title: "Executive Boardroom",
-  },
-  {
     src: aboutOfficeSlide1,
-    alt: "UNIQQ Real Estate oceanview luxury lounge",
-    title: "Oceanfront Lounge",
+    alt: "RealEstateForever.com luxury executive reception and ocean view",
+    title: "Executive Reception",
   },
   {
     src: aboutOfficeSlide2,
-    alt: "UNIQQ Real Estate sunset ocean reception",
-    title: "Sunset Reception",
+    alt: "RealEstateForever.com coastal sunset lounge and private terrace",
+    title: "Coastal Sunset Lounge",
   },
   {
     src: aboutOfficeSlide3,
-    alt: "UNIQQ Real Estate panoramic coastal lobby",
-    title: "Coastal Panorama Lobby",
+    alt: "RealEstateForever.com panoramic coastal lobby",
+    title: "Panoramic Coastal Lobby",
+  },
+  {
+    src: aboutOfficeSlide4,
+    alt: "RealEstateForever.com twilight oceanfront advisory suite",
+    title: "Twilight Advisory Suite",
   },
 ];
 

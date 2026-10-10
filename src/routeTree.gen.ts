@@ -10,14 +10,21 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as Home2RouteImport } from './routes/home-2'
 import { Route as InventoryRouteImport } from './routes/inventory'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as UnlockRouteImport } from './routes/unlock'
+import { Route as WelcomeRouteImport } from './routes/welcome'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const Home2Route = Home2RouteImport.update({
+  id: '/home-2',
+  path: '/home-2',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InventoryRoute = InventoryRouteImport.update({
@@ -40,43 +47,78 @@ const UnlockRoute = UnlockRouteImport.update({
   path: '/unlock',
   getParentRoute: () => rootRouteImport,
 } as any)
+const WelcomeRoute = WelcomeRouteImport.update({
+  id: '/welcome',
+  path: '/welcome',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/home-2': typeof Home2Route
   '/inventory': typeof InventoryRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/unlock': typeof UnlockRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/home-2': typeof Home2Route
   '/inventory': typeof InventoryRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/unlock': typeof UnlockRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/home-2': typeof Home2Route
   '/inventory': typeof InventoryRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/unlock': typeof UnlockRoute
+  '/welcome': typeof WelcomeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/inventory' | '/privacy' | '/terms' | '/unlock'
+  fullPaths:
+    | '/'
+    | '/home-2'
+    | '/inventory'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/welcome'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/inventory' | '/privacy' | '/terms' | '/unlock'
-  id: '__root__' | '/' | '/inventory' | '/privacy' | '/terms' | '/unlock'
+  to:
+    | '/'
+    | '/home-2'
+    | '/inventory'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/welcome'
+  id:
+    | '__root__'
+    | '/'
+    | '/home-2'
+    | '/inventory'
+    | '/privacy'
+    | '/terms'
+    | '/unlock'
+    | '/welcome'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  Home2Route: typeof Home2Route
   InventoryRoute: typeof InventoryRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   UnlockRoute: typeof UnlockRoute
+  WelcomeRoute: typeof WelcomeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -86,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home-2': {
+      id: '/home-2'
+      path: '/home-2'
+      fullPath: '/home-2'
+      preLoaderRoute: typeof Home2RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/inventory': {
@@ -116,15 +165,24 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnlockRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/welcome': {
+      id: '/welcome'
+      path: '/welcome'
+      fullPath: '/welcome'
+      preLoaderRoute: typeof WelcomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  Home2Route: Home2Route,
   InventoryRoute: InventoryRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   UnlockRoute: UnlockRoute,
+  WelcomeRoute: WelcomeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -23,7 +23,7 @@ export const Route = createFileRoute("/inventory")({
   ssr: false,
   loader: async () => {
     const content = await getComingSoonContent({ data: { token: getVisitToken() } });
-    if (!content.unlocked) throw redirect({ to: "/unlock" });
+    if (!content.unlocked) throw redirect({ to: "/welcome" });
     return content;
   },
   head: () => ({ meta: [

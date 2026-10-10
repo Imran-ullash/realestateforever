@@ -9,12 +9,12 @@ export const Route = createFileRoute("/terms")({
   loader: async () => {
     try {
       const content = await getComingSoonContent({ data: { token: getVisitToken() } });
-      if (!content.unlocked) throw redirect({ to: "/unlock" });
+      if (!content.unlocked) throw redirect({ to: "/welcome" });
       return content;
     } catch (err) {
       if ((err as { to?: string })?.to) throw err;
       console.error("[Route loader] error:", err);
-      throw redirect({ to: "/unlock" });
+      throw redirect({ to: "/welcome" });
     }
   },
   head: () => ({

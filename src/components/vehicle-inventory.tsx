@@ -33,16 +33,8 @@ export function VehicleInventory() {
   return (
     <section
       id="vehicles"
-      className="mx-auto max-w-[1600px] scroll-mt-20 border-t border-border px-5 py-16 sm:px-6 sm:py-24 md:px-10 md:py-[60px]"
+      className="mx-auto max-w-[1600px] scroll-mt-20 px-5 pt-0 pb-16 sm:px-6 sm:pt-2 sm:pb-24 md:px-10 md:pt-4 md:pb-[60px]"
     >
-      <div className="mb-8 flex flex-col gap-5 sm:mb-10 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <div className="mb-3 flex items-center gap-3 sm:mb-4"></div>
-          <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">
-            Available vehicles
-          </h2>
-        </div>
-      </div>
 
       <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-4.5 md:p-5">
         <div className="flex items-center gap-3">

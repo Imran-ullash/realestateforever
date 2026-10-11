@@ -635,17 +635,22 @@ function Homepage() {
             <div className="mb-3 flex items-center gap-3 sm:mb-4">
               <span className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(190,149,67,0.7)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-primary sm:text-[12px] sm:tracking-[0.32em]">
-                Verified Marketplace · All Inventory
+                Active Marketplace · Subject To Change Hourly
               </p>
             </div>
             <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">
-              Curated Opportunities & Assets
+              Curated Opportunities <span className="text-primary uppercase tracking-tight">Inventory</span>
             </h2>
           </div>
 
-          <p className="max-w-lg text-pretty text-[15px] leading-7 text-muted-foreground/90 sm:text-base">
-            Explore verified off-market real estate investments and structured luxury assets in one seamless portfolio.
-          </p>
+          <div className="max-w-lg space-y-1.5">
+            <p className="text-[13px] sm:text-[14px] font-semibold text-primary tracking-wide">
+              Inventory is not guaranteed and is subject to hourly changes
+            </p>
+            <p className="text-pretty text-[14px] leading-6 text-muted-foreground/90 sm:text-[15px]">
+              Explore verified opportunities by market and review the core figures before requesting the complete details.
+            </p>
+          </div>
         </div>
 
         <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-5">

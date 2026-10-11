@@ -4,8 +4,11 @@ import {
   ArrowRight,
   Building2,
   CheckCircle2,
+  ChevronLeft,
+  ChevronRight,
   Gem,
   Home,
+  Images,
   KeyRound,
   MapPin,
   Quote,
@@ -13,6 +16,7 @@ import {
   Search,
   Send,
   TrendingUp,
+  Video,
   X,
 } from "lucide-react";
 import { useState, type FormEvent } from "react";
@@ -24,6 +28,7 @@ import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
 import { VehicleInventory } from "@/components/vehicle-inventory";
 import { AboutImageSlider } from "@/components/about-image-slider";
+import { PropertyGalleryModal } from "@/components/property-gallery-modal";
 import homeMainPoster from "@/assets/home-main-poster.jpg.asset.json";
 import homeMainVideo from "@/assets/home-main-video.mp4.asset.json";
 import homeMainWebm from "@/assets/home-main-video.webm.asset.json";
@@ -77,9 +82,9 @@ import homePhoto38 from "@/assets/home-listings/home-38.jpg.asset.json";
 import coastalVilla from "@/assets/coastal-villa.jpg";
 import cityPenthouse from "@/assets/city-penthouse.jpg";
 import mountainRetreat from "@/assets/mountain-retreat.jpg";
-import { listings } from "@/data/listings";
+import { listings, type Listing } from "@/data/listings";
 
-const homeListingPhotos: Record<number, string> = { 1: cleanFirstListing, 2: homePhoto02.url, 3: homePhoto03.url, 4: homePhoto04.url, 5: homePhoto05.url, 6: homePhoto06.url, 7: homePhoto07.url, 8: homePhoto08.url, 9: homePhoto09.url, 10: homePhoto10.url, 11: homePhoto11.url, 12: homePhoto12.url, 13: homePhoto13.url, 14: homePhoto14.url, 15: homePhoto15.url, 16: homePhoto16.url, 17: homePhoto17.url, 18: homePhoto18.url, 19: homePhoto19.url, 20: homePhoto20.url, 21: homePhoto21.url, 22: homePhoto22.url, 23: homePhoto23.url, 24: homePhoto24.url, 25: homePhoto25.url, 26: homePhoto26.url, 27: homePhoto27.url, 28: homePhoto28.url, 29: homePhoto29.url, 30: homePhoto30.url, 31: homePhoto31.url, 32: homePhoto32.url, 33: homePhoto33.url, 34: homePhoto34.url, 35: homePhoto35.url, 36: homePhoto36.url, 37: homePhoto37.url, 38: homePhoto38.url };
+const homeListingPhotos: Record<number, string> = { 100: "/listings/temecula-ca/temecula-01-sunset-pool.jpg", 101: "/listings/indio-ca/indio-01-waterfront-villa.png", 102: "/listings/winchester-ca/winchester-01.png", 103: "/listings/twentynine-palms-ca/29palms-01-front.jpg", 1: cleanFirstListing, 2: homePhoto02.url, 3: homePhoto03.url, 4: homePhoto04.url, 5: homePhoto05.url, 6: homePhoto06.url, 7: homePhoto07.url, 8: homePhoto08.url, 9: homePhoto09.url, 10: homePhoto10.url, 11: homePhoto11.url, 12: homePhoto12.url, 13: homePhoto13.url, 14: homePhoto14.url, 15: homePhoto15.url, 16: homePhoto16.url, 17: homePhoto17.url, 18: homePhoto18.url, 19: homePhoto19.url, 20: homePhoto20.url, 21: homePhoto21.url, 22: homePhoto22.url, 23: homePhoto23.url, 24: homePhoto24.url, 25: homePhoto25.url, 26: homePhoto26.url, 27: homePhoto27.url, 28: homePhoto28.url, 29: homePhoto29.url, 30: homePhoto30.url, 31: homePhoto31.url, 32: homePhoto32.url, 33: homePhoto33.url, 34: homePhoto34.url, 35: homePhoto35.url, 36: homePhoto36.url, 37: homePhoto37.url, 38: homePhoto38.url };
 
 const listingStates = ["All", ...Array.from(new Set(listings.map((l) => l.state)))];
 Object.assign(homeListingPhotos, {
@@ -190,6 +195,50 @@ function Homepage() {
 
   const updateSearch = (value: string) => {
     setSearch(value);
+  };
+
+  const [galleryListing, setGalleryListing] = useState<Listing | null>(null);
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+  const [cardPhotoIndexes, setCardPhotoIndexes] = useState<Record<number, number>>({});
+
+  const getListingMediaList = (listing: Listing) => {
+    const items: { type: "image" | "video"; url: string; label: string }[] = [];
+    const imgs =
+      listing.images && listing.images.length > 0
+        ? listing.images
+        : homeListingPhotos[listing.id]
+        ? [homeListingPhotos[listing.id]!]
+        : [listing.image];
+    imgs.forEach((url, i) => items.push({ type: "image", url, label: `Photo ${i + 1}` }));
+    if (listing.videos && listing.videos.length > 0) {
+      listing.videos.forEach((url, i) => items.push({ type: "video", url, label: `Video ${i + 1}` }));
+    }
+    return items;
+  };
+
+  const nextCardMedia = (e: React.MouseEvent, listing: Listing) => {
+    e.stopPropagation();
+    const count = getListingMediaList(listing).length;
+    if (count <= 1) return;
+    setCardPhotoIndexes((prev) => ({
+      ...prev,
+      [listing.id]: ((prev[listing.id] ?? 0) + 1) % count,
+    }));
+  };
+
+  const prevCardMedia = (e: React.MouseEvent, listing: Listing) => {
+    e.stopPropagation();
+    const count = getListingMediaList(listing).length;
+    if (count <= 1) return;
+    setCardPhotoIndexes((prev) => ({
+      ...prev,
+      [listing.id]: ((prev[listing.id] ?? 0) - 1 + count) % count,
+    }));
+  };
+
+  const openGallery = (listing: Listing, index = 0) => {
+    setGalleryListing(listing);
+    setGalleryInitialIndex(index);
   };
 
   const [sending, setSending] = useState<"hero" | "enquiry" | null>(null);
@@ -576,28 +625,118 @@ function Homepage() {
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-          {visibleListings.map((listing) => (
-            <article
-              key={listing.id}
-              className="reveal-up group min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden"
-            >
-              <div className="relative aspect-[16/10] luxury-image-frame overflow-hidden">
-                <img
-                  src={homeListingPhotos[listing.id] ?? listing.image}
-                  alt={`Property in ${listing.city}, ${listing.state} ${listing.zip}`}
-                  className="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                />
-              </div>
+          {visibleListings.map((listing) => {
+            const mediaList = getListingMediaList(listing);
+            const hasMultipleMedia = mediaList.length > 1;
+            const currentIndex = (cardPhotoIndexes[listing.id] ?? 0) % (mediaList.length || 1);
+            const currentMedia = mediaList[currentIndex] ?? mediaList[0]!;
+            const totalPhotos = listing.images && listing.images.length > 0 ? listing.images.length : 1;
+            const totalVideos = listing.videos && listing.videos.length > 0 ? listing.videos.length : 0;
+            const isVideo = currentMedia.type === "video";
+            const videoNumber = isVideo ? currentIndex - totalPhotos + 1 : 0;
 
-              <div className="flex flex-1 flex-col p-5 sm:p-6">
-                <div className="flex flex-wrap items-start justify-between gap-3">
-                  <h3 className="min-w-0 flex-1 basis-28 break-words font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
-                    {listing.city}, {listing.state} {listing.zip}
-                  </h3>
+            return (
+              <article
+                key={listing.id}
+                className="reveal-up group min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden transition-all duration-300 hover:border-primary/50"
+              >
+                <div
+                  className="relative aspect-[16/10] luxury-image-frame overflow-hidden cursor-pointer group/img bg-black"
+                  onClick={() => openGallery(listing, currentIndex)}
+                  title="Click to view full photo and video gallery"
+                >
+                  {isVideo ? (
+                    <div className="relative size-full bg-black flex items-center justify-center">
+                      <video
+                        key={currentMedia.url}
+                        src={currentMedia.url}
+                        controls
+                        playsInline
+                        className="size-full object-cover"
+                        onClick={(e) => e.stopPropagation()}
+                      />
+                    </div>
+                  ) : (
+                    <img
+                      src={currentMedia.url}
+                      alt={`Property in ${listing.city}, ${listing.state} ${listing.zip}`}
+                      className="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    />
+                  )}
+                  {hasMultipleMedia && (
+                    <>
+                      <span className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[11px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md pointer-events-none">
+                        {isVideo ? (
+                          <>
+                            <Video className="size-3.5 text-primary" />
+                            <span>
+                              Video {videoNumber} of {totalVideos}
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <Images className="size-3.5 text-primary" />
+                            <span>
+                              Photo {currentIndex + 1} of {totalPhotos}
+                              {totalVideos > 0 && ` · ${totalVideos} Videos`}
+                            </span>
+                          </>
+                        )}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => prevCardMedia(e, listing)}
+                        aria-label="Previous item"
+                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                      >
+                        <ChevronLeft className="size-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => nextCardMedia(e, listing)}
+                        aria-label="Next item"
+                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                      >
+                        <ChevronRight className="size-4" />
+                      </button>
+                    </>
+                  )}
                 </div>
-              </div>
-            </article>
-          ))}
+
+                <div
+                  className="flex flex-1 flex-col p-5 sm:p-6 cursor-pointer"
+                  onClick={() => openGallery(listing, currentIndex)}
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <h3 className="min-w-0 flex-1 basis-28 break-words font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                      {listing.city}, {listing.state} {listing.zip}
+                    </h3>
+                  </div>
+
+                  {(listing.beds || listing.baths || listing.area) && (
+                    <p className="mt-2 text-[13px] tracking-wide text-muted-foreground/90 font-medium">
+                      {listing.beds && `${listing.beds} Beds`}
+                      {listing.baths && ` · ${listing.baths} Baths`}
+                      {listing.area && ` · ${listing.area} sq ft`}
+                    </p>
+                  )}
+
+                  {listing.lister && (
+                    <div className="mt-2.5 flex items-center justify-between border-t border-primary/15 pt-2.5">
+                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                        {listing.lister}
+                      </span>
+                      {hasMultipleMedia && (
+                        <span className="text-[11px] text-muted-foreground/80 group-hover:text-primary transition-colors">
+                          {totalVideos > 0 ? "View media & videos →" : "View photos →"}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </article>
+            );
+          })}
         </div>
 
         {filteredListings.length === 0 && (
@@ -827,6 +966,12 @@ function Homepage() {
           </div>
         </div>
       </footer>
+
+      <PropertyGalleryModal
+        listing={galleryListing}
+        initialIndex={galleryInitialIndex}
+        onClose={() => setGalleryListing(null)}
+      />
     </main>
   );
 }

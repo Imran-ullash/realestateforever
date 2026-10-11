@@ -40,6 +40,8 @@ import dealdeck38 from "@/assets/listings/dealdeck-38.png.asset.json";
 export type Listing = {
   id: number;
   image: string;
+  images?: string[];
+  videos?: string[];
   city: string;
   state: string;
   zip: string;
@@ -55,6 +57,95 @@ export type Listing = {
 };
 
 export const listings: Listing[] = [
+  {
+    id: 100,
+    image: "/listings/temecula-ca/temecula-01-sunset-pool.jpg",
+    images: [
+      "/listings/temecula-ca/temecula-01-sunset-pool.jpg",
+      "/listings/temecula-ca/temecula-02-daytime-pool.jpg",
+      "/listings/temecula-ca/temecula-03-patio.jpg",
+    ],
+    city: "Temecula",
+    state: "CA",
+    zip: "92590",
+    beds: "4",
+    baths: "3",
+    area: "2,600",
+    entry: "Inquire",
+    down: "",
+    arv: "",
+    type: "Off-Market",
+    lister: "Mike RE",
+    isNew: true,
+  },
+  {
+    id: 101,
+    image: "/listings/indio-ca/indio-01-waterfront-villa.png",
+    images: [
+      "/listings/indio-ca/indio-01-waterfront-villa.png",
+      "/listings/indio-ca/indio-02-living-room.jpg",
+      "/listings/indio-ca/indio-03-kitchen.jpg",
+      "/listings/indio-ca/indio-04-billiards.jpg",
+      "/listings/indio-ca/indio-05-balcony.jpg",
+    ],
+    city: "Indio",
+    state: "CA",
+    zip: "92203",
+    beds: "4",
+    baths: "3",
+    area: "2,726",
+    entry: "Inquire",
+    down: "",
+    arv: "",
+    type: "Off-Market",
+    lister: "Mike RE",
+    isNew: true,
+  },
+  {
+    id: 102,
+    image: "/listings/winchester-ca/winchester-01.png",
+    images: [
+      "/listings/winchester-ca/winchester-01.png",
+    ],
+    videos: [
+      "/listings/winchester-ca/W1.mp4",
+      "/listings/winchester-ca/W2.mp4",
+    ],
+    city: "Winchester",
+    state: "CA",
+    zip: "92596",
+    beds: "4",
+    baths: "3",
+    area: "2,273",
+    entry: "Inquire",
+    down: "",
+    arv: "",
+    type: "Off-Market",
+    lister: "Mike RE",
+    isNew: true,
+  },
+  {
+    id: 103,
+    image: "/listings/twentynine-palms-ca/29palms-01-front.jpg",
+    images: [
+      "/listings/twentynine-palms-ca/29palms-01-front.jpg",
+      "/listings/twentynine-palms-ca/29palms-02-bedroom.jpg",
+      "/listings/twentynine-palms-ca/29palms-03-patio-lounge.jpg",
+      "/listings/twentynine-palms-ca/29palms-04-backyard.jpg",
+    ],
+    city: "Twentynine Palms",
+    state: "CA",
+    zip: "92277",
+    beds: "2",
+    baths: "1",
+    area: "1,072",
+    entry: "Inquire",
+    down: "",
+    arv: "",
+    type: "Off-Market",
+    lister: "Mike RE",
+    isNew: true,
+  },
   { id: 1, image: dealdeck01.url, city: "Acworth", state: "GA", zip: "30101", beds: "3", baths: "2.5", area: "1,780", entry: "$12,000", down: "3.1% Down", arv: "", type: "Subject To", lister: "Boulder Capital Investments", isNew: true },
   { id: 2, image: dealdeck02.url, city: "Lake City", state: "FL", zip: "32025", beds: "4", baths: "2", area: "2,205", entry: "$35,000", down: "7.8% Down", arv: "", type: "Subject To", lister: "UHN Capital", isNew: false },
   { id: 3, image: dealdeck03.url, city: "Savannah", state: "GA", zip: "31401", beds: "5", baths: "3", area: "3,236", entry: "$30,000", down: "8.0% Down", arv: "", type: "Subject To", lister: "UHN Capital", isNew: false },

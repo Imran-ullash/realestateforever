@@ -229,12 +229,12 @@ function Homepage() {
   const sendEnquiry = submitForm("enquiry");
 
   return (
-    <main id="top" className="min-h-screen bg-background pt-[var(--site-header-height,81px)] text-foreground selection:bg-primary/30 selection:text-primary">
+    <main id="top" className="min-h-screen bg-background pt-[var(--site-header-height,81px)] text-foreground selection:bg-primary/30 selection:text-primary overflow-x-hidden w-full max-w-full">
       <SiteHeader />
 
       <section
         aria-label="Real Estate Forever film"
-        className="relative h-[calc(100vh-var(--site-header-height,81px))] sm:h-[calc(100dvh-var(--site-header-height,81px))] w-full overflow-hidden border-t border-border bg-black"
+        className="relative h-[48vh] sm:h-[52vh] md:h-[calc(100dvh-var(--site-header-height,81px))] w-full overflow-hidden border-t border-border bg-black"
       >
         <video
           poster={homeMainPoster.url}

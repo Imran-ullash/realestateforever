@@ -268,22 +268,22 @@ function Welcome() {
             BUY MORE REAL ESTATE.<br className="block" /> THEY DO NOT MAKE MORE IT.
           </h1>
 
-          <div className="access-gold-frame mt-1 w-full max-w-[420px] rounded-lg border-2 border-primary bg-background/65 p-6 backdrop-blur-md sm:mt-10 sm:p-8">
-            <div className="mx-auto mb-5 flex size-10 items-center justify-center rounded-full border border-primary/45 bg-background/40 text-primary">
-              <LockKeyhole className="size-4" />
+          <div className="access-gold-frame mt-1 w-full max-w-[420px] rounded-lg border-2 border-primary bg-background/65 p-4 sm:p-8 backdrop-blur-md sm:mt-10">
+            <div className="mx-auto mb-4 sm:mb-5 flex size-9 sm:size-10 items-center justify-center rounded-full border border-primary/45 bg-background/40 text-primary">
+              <LockKeyhole className="size-3.5 sm:size-4" />
             </div>
-            <p className="text-[12px] font-medium uppercase text-primary sm:text-[13px]">
+            <p className="text-[11px] sm:text-[13px] font-medium uppercase text-primary">
               EXCLUSIVE & PRIVATE ACCESS ONLY
             </p>
-            <form onSubmit={onSubmit} className="mt-6" noValidate autoComplete="off">
-              <label htmlFor="access-code" className="mb-3 block text-left text-[11px] font-bold uppercase tracking-[0.3em] text-foreground/80">
+            <form onSubmit={onSubmit} className="mt-5 sm:mt-6" noValidate autoComplete="off">
+              <label htmlFor="access-code" className="mb-2.5 sm:mb-3 block text-left text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.25em] sm:tracking-[0.3em] text-foreground/80">
                 ENTER PASSWORD
               </label>
-              <div className="flex items-center gap-3">
-                <div className="relative flex-1">
+              <div className="flex items-center gap-2 sm:gap-3">
+                <div className="relative flex-1 min-w-0">
                   <KeyRound
                     aria-hidden
-                    className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-primary/70"
+                    className="pointer-events-none absolute left-3.5 sm:left-4 top-1/2 size-4 -translate-y-1/2 text-primary/70"
                   />
                   <Input
                     id="access-code"
@@ -300,23 +300,23 @@ function Welcome() {
                     autoFocus
                     aria-invalid={error}
                     aria-describedby={error ? "password-error" : undefined}
-                    className={`h-14 min-w-0 rounded-full border bg-background/50 pl-11 pr-4 text-[13px] tracking-[0.25em] text-foreground transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 ${error ? "border-destructive/60" : "border-foreground/25 hover:border-foreground/45"}`}
+                    className={`h-12 sm:h-14 w-full min-w-0 rounded-full border bg-background/50 pl-10 sm:pl-11 pr-3 sm:pr-4 text-base sm:text-[13px] tracking-[0.2em] sm:tracking-[0.25em] text-foreground transition-colors focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-primary/25 ${error ? "border-destructive/60" : "border-foreground/25 hover:border-foreground/45"}`}
                   />
                 </div>
                 <button
                   type="submit"
                   disabled={submitting}
                   aria-label="Enter site"
-                  className="access-arrow-btn group relative size-14 shrink-0 rounded-full bg-gradient-to-b from-primary to-primary/55 text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 hover:scale-110 hover:shadow-2xl hover:shadow-primary/80 active:scale-90 disabled:opacity-70"
+                  className="access-arrow-btn group relative size-12 sm:size-14 shrink-0 rounded-full bg-gradient-to-b from-primary to-primary/55 text-primary-foreground shadow-lg shadow-primary/40 transition-all duration-300 hover:scale-105 sm:hover:scale-110 hover:shadow-2xl hover:shadow-primary/80 active:scale-90 disabled:opacity-70"
                 >
                   <span
                     aria-hidden
-                    className="access-arrow-ring absolute -inset-1.5 rounded-full border border-primary/40 transition-[border-color,inset] duration-300 group-hover:-inset-2 group-hover:border-primary/90"
+                    className="access-arrow-ring absolute -inset-1 sm:-inset-1.5 rounded-full border border-primary/40 transition-[border-color,inset] duration-300 group-hover:-inset-1.5 sm:group-hover:-inset-2 group-hover:border-primary/90"
                   />
                   <span aria-hidden className="absolute inset-0 overflow-hidden rounded-full">
                     <span className="absolute -left-1/2 inset-y-0 w-1/2 skew-x-12 bg-gradient-to-r from-transparent via-white/60 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-[420%]" />
                   </span>
-                  <ArrowRight className="relative mx-auto size-5 transition-transform duration-300 group-hover:translate-x-1.5" />
+                  <ArrowRight className="relative mx-auto size-4.5 sm:size-5 transition-transform duration-300 group-hover:translate-x-1 sm:group-hover:translate-x-1.5" />
                 </button>
               </div>
               <p

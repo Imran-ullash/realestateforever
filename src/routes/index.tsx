@@ -327,12 +327,12 @@ function Homepage() {
   const sendEnquiry = submitForm("enquiry");
 
   return (
-    <main id="top" className="min-h-screen bg-background pt-[var(--site-header-height,81px)] text-foreground selection:bg-primary/30 selection:text-primary">
+    <main id="top" className="min-h-screen bg-background pt-[var(--site-header-height,81px)] text-foreground selection:bg-primary/30 selection:text-primary overflow-x-hidden w-full max-w-full">
       <SiteHeader />
 
       <section
         aria-label="Real Estate Forever film"
-        className="relative h-[calc(100vh-var(--site-header-height,81px))] sm:h-[calc(100dvh-var(--site-header-height,81px))] w-full overflow-hidden border-t border-border bg-black"
+        className="relative h-[48vh] sm:h-[52vh] md:h-[calc(100dvh-var(--site-header-height,81px))] w-full overflow-hidden border-t border-border bg-black"
       >
         <video
           poster={homeMainPoster.url}
@@ -352,7 +352,7 @@ function Homepage() {
 
       <section
         id="about"
-        className="relative isolate scroll-mt-[var(--site-header-height,81px)] border-t border-primary/35 bg-gradient-to-b from-card/40 via-background to-card/15 py-16 sm:py-20 md:py-24"
+        className="relative isolate overflow-hidden scroll-mt-[var(--site-header-height,81px)] border-t border-primary/35 bg-gradient-to-b from-card/40 via-background to-card/15 py-16 sm:py-20 md:py-24"
       >
         <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-primary/5 blur-[120px] -z-10" />
 

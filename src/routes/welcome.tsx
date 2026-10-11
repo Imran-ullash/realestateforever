@@ -38,7 +38,7 @@ function Welcome() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(false);
   const [submitting, setSubmitting] = useState(false);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [waitingForGesture, setWaitingForGesture] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const soundPlayCountRef = useRef(0);

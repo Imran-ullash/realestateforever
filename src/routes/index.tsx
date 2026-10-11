@@ -352,7 +352,7 @@ function Homepage() {
 
       <section
         id="about"
-        className="relative isolate scroll-mt-[var(--site-header-height,81px)] border-t border-primary/20 bg-gradient-to-b from-card/40 via-background to-card/15 py-16 sm:py-20 md:py-24"
+        className="relative isolate scroll-mt-[var(--site-header-height,81px)] border-t border-primary/35 bg-gradient-to-b from-card/40 via-background to-card/15 py-16 sm:py-20 md:py-24"
       >
         <div aria-hidden className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 size-[600px] rounded-full bg-primary/5 blur-[120px] -z-10" />
 
@@ -362,7 +362,7 @@ function Homepage() {
             <div className="mb-3 flex items-center gap-2.5">
               <span className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(190,149,67,0.7)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-primary sm:text-[12px] sm:tracking-[0.32em]">
-                Private Advisory & Investment
+                Strategic & Carefully Chosen Leadership
               </p>
             </div>
             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
@@ -371,19 +371,14 @@ function Homepage() {
                   About Us
                 </h2>
                 <p className="mt-2 text-base sm:text-lg font-light italic font-display text-muted-foreground/90 max-w-2xl">
-                  Boutique real estate investment, asset curation, and private client advisory.
+                  Real Estate Investments & Development
                 </p>
-              </div>
-              <div aria-hidden className="hidden lg:flex items-center gap-3 opacity-40">
-                <span className="h-px w-16 bg-gradient-to-r from-transparent to-primary" />
-                <span className="size-1.5 rotate-45 border border-primary bg-primary" />
-                <span className="h-px w-16 bg-gradient-to-l from-transparent to-primary" />
               </div>
             </div>
           </div>
 
-          {/* Two-Column Grid: Gallery Slider + Story & Registry */}
-          <div className="grid gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-14 items-center">
+          {/* Two-Column Grid: Gallery Slider + Story */}
+          <div className="grid gap-10 lg:grid-cols-12 lg:gap-12 xl:gap-14 items-stretch">
             {/* Left Column: Gallery Slider (Natural aspect ratio - company name never cut off) */}
             <div className="lg:col-span-7 flex flex-col gap-3">
               <div className="relative group">
@@ -393,107 +388,36 @@ function Homepage() {
                 </div>
               </div>
               <div className="flex items-center justify-between px-1 text-[11px] uppercase tracking-[0.18em] text-muted-foreground/75">
-                <span>Real Estate Forever · Advisory Facilities</span>
-                <span className="text-primary font-semibold">Private Portfolio</span>
+                <span>Real Estate Forever</span>
+                <span className="text-primary font-semibold">CORPORATE USE ONLY</span>
               </div>
             </div>
 
-            {/* Right Column: Mission Story & VIP Registry Card */}
-            <div className="lg:col-span-5 flex flex-col gap-5">
-              {/* Mission Narrative */}
-              <div className="rounded-xl border border-border/80 bg-background/50 p-5 sm:p-6 backdrop-blur-md">
-                <h3 className="font-display text-2xl font-normal text-foreground tracking-[-0.01em]">
-                  A boutique approach to <span className="text-primary italic font-light">enduring value</span>.
-                </h3>
-                <p className="mt-2.5 text-[14px] leading-relaxed text-muted-foreground">
-                  We are a boutique real estate investment and development firm focused on uncovering rare off-market acquisitions, engineering lasting asset value, and cultivating meaningful relationships with discerning private capital partners nationwide.
-                </p>
+            {/* Right Column: Key Narrative Section (Enlarged to match left image slider height) */}
+            <div className="lg:col-span-5 flex flex-col">
+              <div className="relative flex h-full flex-col justify-between rounded-2xl border border-primary/35 bg-card/75 p-7 sm:p-9 lg:p-11 shadow-2xl backdrop-blur-md overflow-hidden">
+                <div aria-hidden className="pointer-events-none absolute -top-24 -right-24 size-72 rounded-full bg-primary/10 blur-3xl" />
+                <div aria-hidden className="pointer-events-none absolute -bottom-24 -left-24 size-72 rounded-full bg-primary/5 blur-3xl" />
 
-                <div className="mt-4 grid grid-cols-2 gap-3 border-t border-border/60 pt-3.5 text-left">
-                  <div>
-                    <p className="font-display text-base sm:text-lg font-medium text-foreground">Discreet & Direct</p>
-                    <p className="text-[11px] text-muted-foreground/80 mt-0.5 leading-snug">
-                      Private off-market transactions with principal guidance
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-display text-base sm:text-lg font-medium text-foreground">Active Capital</p>
-                    <p className="text-[11px] text-muted-foreground/80 mt-0.5 leading-snug">
-                      Vetted high-potential residential & commercial portfolios
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Private Client Registry Card */}
-              <div className="rounded-xl border border-primary/35 bg-card/65 p-5 sm:p-6 shadow-2xl backdrop-blur-md relative overflow-hidden">
-                <div className="flex items-center justify-between border-b border-primary/20 pb-2.5 mb-3.5">
-                  <div className="flex items-center gap-2">
-                    <span className="size-1.5 rotate-45 border border-primary bg-primary" />
-                    <span className="text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
-                      Private Client Registry
+                <div className="relative z-10">
+                  <div className="mb-6 flex items-center gap-2.5 border-b border-primary/20 pb-4">
+                    <span className="size-2 rotate-45 border border-primary bg-primary shadow-[0_0_8px_rgba(190,149,67,0.7)]" />
+                    <span className="text-[12px] font-bold uppercase tracking-[0.28em] text-primary sm:text-[13px]">
+                      Real Estate Forever
                     </span>
                   </div>
-                  <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
-                    Direct Directory
-                  </span>
+                  <h3 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-normal text-foreground tracking-[-0.01em] leading-[1.14]">
+                    Real Estate Investments & <span className="text-primary italic font-light">Development</span>
+                  </h3>
+                  <p className="mt-5 text-[15px] sm:text-base lg:text-[17px] leading-relaxed text-muted-foreground/90 font-light sm:mt-6">
+                    Strategic & carefully chosen leadership focused on uncovering exceptional opportunities, engineering lasting asset value, and cultivating meaningful relationships.
+                  </p>
                 </div>
 
-                <p className="text-[12px] text-muted-foreground leading-snug mb-3.5">
-                  Register your buying profile to receive matched off-market opportunities directly.
-                </p>
-
-                {sentMsg?.form === "hero" && (
-                  <div
-                    role="status"
-                    className={`mb-3.5 rounded-md p-2.5 text-xs font-medium ${sentMsg.ok
-                        ? "bg-primary/10 border border-primary/40 text-primary"
-                        : "bg-destructive/10 border border-destructive/40 text-destructive"
-                      }`}
-                  >
-                    {sentMsg.ok
-                      ? "✓ Your inquiry has been received. Our team will connect with you shortly."
-                      : "✕ Sorry, the inquiry could not be sent. Please try again."}
-                  </div>
-                )}
-
-                <form onSubmit={submitForm("hero")} className="space-y-2.5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    <input
-                      name="name"
-                      type="text"
-                      placeholder="Full Name"
-                      aria-label="Name"
-                      required
-                      className="h-11 w-full rounded-md border border-border bg-background/70 px-3.5 text-[13px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:bg-background focus:ring-1 focus:ring-primary/40"
-                    />
-                    <input
-                      name="phone"
-                      type="tel"
-                      placeholder="Cell Phone"
-                      aria-label="Cell"
-                      required
-                      className="h-11 w-full rounded-md border border-border bg-background/70 px-3.5 text-[13px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:bg-background focus:ring-1 focus:ring-primary/40"
-                    />
-                  </div>
-                  <div>
-                    <input
-                      name="email"
-                      type="email"
-                      placeholder="Corporate / Private Email"
-                      aria-label="Email"
-                      required
-                      className="h-11 w-full rounded-md border border-border bg-background/70 px-3.5 text-[13px] text-foreground outline-none transition-all placeholder:text-muted-foreground/60 focus:border-primary focus:bg-background focus:ring-1 focus:ring-primary/40"
-                    />
-                  </div>
-                  <Button
-                    type="submit"
-                    disabled={sending === "hero"}
-                    className="luxury-btn-primary h-11 w-full rounded-md text-[12px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-primary/20 transition-all hover:shadow-primary/40"
-                  >
-                    {sending === "hero" ? "SENDING INQUIRY..." : "SUBMIT TO JOIN DIRECTORY"}
-                  </Button>
-                </form>
+                <div className="relative z-10 mt-8 pt-5 border-t border-primary/20 flex items-center justify-between text-[11px] sm:text-[12px] uppercase tracking-[0.2em] text-muted-foreground/75 sm:mt-10">
+                  <span className="text-primary font-semibold">Leadership Focus</span>
+                  <span>Direct Advisory</span>
+                </div>
               </div>
             </div>
           </div>
@@ -1037,13 +961,14 @@ function Homepage() {
             >
               <div className="grid gap-5 sm:grid-cols-2 sm:gap-7">
                 <label className="enquiry-field group relative block">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    Full Name
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>FULL NAME</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="name"
                     required
-                    className="peer w-full border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
+                    className="peer w-full border-b border-primary/45 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
                   />
                   <span
                     aria-hidden
@@ -1051,14 +976,15 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    Email
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>EMAIL</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="email"
                     type="email"
                     required
-                    className="peer w-full border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
+                    className="peer w-full border-b border-primary/45 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
                   />
                   <span
                     aria-hidden
@@ -1066,13 +992,16 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block sm:col-span-2">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    CELL PHONE
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>CELL PHONE</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="subject"
-                    type="text"
-                    className="peer w-full border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
+                    type="tel"
+                    required
+                    placeholder="(555) 000-0000"
+                    className="peer w-full border-b border-primary/45 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent placeholder:text-muted-foreground/40"
                   />
                   <span
                     aria-hidden
@@ -1080,14 +1009,15 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block sm:col-span-2">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    DIRECT MESSAGE TO LEADERSHIP
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>DIRECT MESSAGE TO LEADERSHIP</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <textarea
                     name="message"
                     required
                     rows={4}
-                    className="peer w-full resize-none border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
+                    className="peer w-full resize-none border-b border-primary/45 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
                   />
                   <span
                     aria-hidden
@@ -1095,14 +1025,19 @@ function Homepage() {
                   />
                 </label>
               </div>
-              <Button
+              <button
                 type="submit"
                 disabled={sending === "enquiry"}
-                className="luxury-btn-primary group mt-9 h-14 w-full rounded-lg text-[12px] font-bold uppercase tracking-[0.18em]"
+                className="leadership-submit-btn group mt-9 relative flex h-16 w-full items-center justify-between rounded-lg px-6 sm:px-8 text-[#0d0d0f] transition-all duration-300 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {sending === "enquiry" ? "Sending..." : "SUBMIT TO LEADERSHIP"}{" "}
-                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
-              </Button>
+                <span className="leadership-btn-shimmer" aria-hidden="true" />
+                <span className="font-sans text-[13px] sm:text-[14px] font-extrabold uppercase tracking-[0.22em] text-[#0d0d0f] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+                  {sending === "enquiry" ? "SENDING..." : "SUBMIT TO LEADERSHIP"}
+                </span>
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-black text-[#f3d078] border border-[#f3d078]/60 shadow-[0_2px_8px_rgba(0,0,0,0.6)] transition-all duration-300 group-hover:scale-110 group-hover:bg-black group-hover:text-white group-hover:border-white group-hover:shadow-[0_0_16px_rgba(255,215,0,0.7)]">
+                  <ArrowRight className="size-5 stroke-[2.75] transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </button>
               {sentMsg?.form === "enquiry" && (
                 <p
                   role="status"

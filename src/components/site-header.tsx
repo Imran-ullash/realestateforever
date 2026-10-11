@@ -3,6 +3,7 @@ import { Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
+import { TalkLiveButton } from "@/components/talk-live-button";
 
 const marketClocks = [
   { city: "California", zone: "America/Los_Angeles" },
@@ -10,7 +11,7 @@ const marketClocks = [
   { city: "Florida", zone: "America/New_York" },
   { city: "Texas", zone: "America/Chicago" },
   { city: "New York", zone: "America/New_York" },
-  { city: "Washington DC", zone: "America/New_York" },
+  { city: "Washington DC", shortName: "Wash DC", zone: "America/New_York" },
 ];
 
 function getClockParts(date: Date, timeZone: string) {
@@ -64,12 +65,12 @@ function MarketClocks() {
   }, []);
 
   return (
-    <div aria-label="Current market times" className="hidden items-stretch justify-between gap-2 lg:flex">
+    <div aria-label="Current market times" className="hidden items-center justify-between gap-1 lg:gap-1.5 xl:gap-2 2xl:gap-3.5 lg:flex">
       {marketClocks.map((market) => {
         const clock = now ? getClockParts(now, market.zone) : null;
         return (
-          <div key={market.city} className="flex flex-col items-center w-[87px] 2xl:w-[104px]">
-            <div className="relative size-[68px] xl:size-[76px]">
+          <div key={market.city} className="flex flex-col items-center w-[50px] lg:w-[54px] xl:w-[62px] 2xl:w-[82px]">
+            <div className="relative size-[38px] lg:size-[42px] xl:size-[48px] 2xl:size-[62px]">
               <svg
                 viewBox="0 0 72 72"
                 aria-hidden="true"
@@ -142,15 +143,22 @@ function MarketClocks() {
                 <circle cx="36" cy="36" r="1.8" fill="currentColor" className="text-primary" />
               </svg>
             </div>
-            <span className="mt-2 whitespace-nowrap font-display text-[11px] font-semibold uppercase tracking-[0.08em] leading-none text-primary drop-shadow-[0_1px_3px_rgba(190,149,67,0.25)] xl:text-[13px]">
-              {market.city}
+            <span className="mt-1 whitespace-nowrap font-display text-[8.5px] lg:text-[9px] xl:text-[10px] 2xl:text-[12px] font-semibold uppercase tracking-[0.03em] leading-none text-primary drop-shadow-[0_1px_2px_rgba(190,149,67,0.3)]">
+              {market.shortName ? (
+                <>
+                  <span className="2xl:hidden">{market.shortName}</span>
+                  <span className="hidden 2xl:inline">{market.city}</span>
+                </>
+              ) : (
+                market.city
+              )}
             </span>
             <time
               dateTime={now?.toISOString()}
               aria-label={clock ? `${clock.digital} in ${market.city}` : market.city}
-              className="mt-1.5 whitespace-nowrap font-sans text-[10px] font-medium tracking-wider leading-none text-foreground/90 xl:text-[12px]"
+              className="mt-1 whitespace-nowrap font-sans text-[7.5px] lg:text-[8px] xl:text-[9px] 2xl:text-[11px] font-medium tracking-normal leading-none text-foreground/80"
             >
-              {clock ? `${clock.short} ${clock.period}` : "--:-- --"}
+              {clock ? `${clock.short} ${clock.period}` : "--:--"}
             </time>
           </div>
         );
@@ -189,52 +197,53 @@ export function SiteHeader({ home = "" }: { home?: string }) {
   return (
     <header
       ref={headerRef}
-      className="fixed inset-x-0 top-0 z-50 border-b border-primary/20 bg-background/90 shadow-[0_8px_32px_rgba(0,0,0,0.75)] backdrop-blur-2xl"
+      className="fixed inset-x-0 top-0 z-50 border-b border-primary/35 bg-background/90 shadow-[0_8px_32px_rgba(0,0,0,0.75)] backdrop-blur-2xl"
     >
       <div
         ref={barRef}
-        className="mx-auto grid py-2 max-w-[1600px] grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-5 sm:px-6  lg:grid-cols-[auto_1fr_1fr] lg:px-10"
+        className="mx-auto flex py-1.5 sm:py-2 max-w-[1600px] items-center justify-between gap-2 lg:gap-2.5 xl:gap-3.5 2xl:gap-6 px-3 sm:px-6 lg:px-4 xl:px-6 2xl:px-10"
       >
         <Link
           to="/"
           aria-label="Real Estate Forever home"
-          className="min-w-0 justify-self-start transition-opacity hover:opacity-80"
+          className="shrink-0 min-w-0 transition-opacity hover:opacity-80"
           onClick={() => {
             if (window.location.pathname === "/") {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
           }}
         >
-          <BrandLogo className="w-40 sm:w-48 xl:w-[240px]" />
+          <BrandLogo className="w-32 sm:w-38 lg:w-32 xl:w-[165px] 2xl:w-[200px]" />
         </Link>
         <nav
           aria-label="Primary navigation"
-          className="hidden items-center justify-center gap-6 text-[14px] font-bold uppercase tracking-[0.16em] text-foreground lg:flex xl:gap-8"
+          className="hidden items-center justify-center gap-2.5 lg:gap-3 xl:gap-4.5 2xl:gap-7 text-[11px] lg:text-[11px] xl:text-[12.5px] 2xl:text-[13.5px] font-bold uppercase tracking-[0.12em] text-foreground lg:flex mx-0.5 xl:mx-1"
         >
           {home ? (
-            <Link to="/" hash="about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+            <Link to="/" hash="about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.14em]">
               ABOUT US
             </Link>
           ) : (
-            <a href="#about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+            <a href="#about" className="transition-all duration-300 hover:text-primary hover:tracking-[0.14em]">
               ABOUT US
             </a>
           )}
-          <Link to="/inventory" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+          <Link to="/inventory" className="transition-all duration-300 hover:text-primary hover:tracking-[0.14em]">
             INVENTORY
           </Link>
           {home ? (
-            <Link to="/" hash="contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+            <Link to="/" hash="contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.14em]">
               CONTACT US
             </Link>
           ) : (
-            <a href="#contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.18em]">
+            <a href="#contact" className="transition-all duration-300 hover:text-primary hover:tracking-[0.14em]">
               CONTACT US
             </a>
           )}
         </nav>
-        <div className="flex shrink-0 items-center justify-self-end gap-2 sm:gap-3">
+        <div className="flex shrink-0 items-center justify-end gap-1.5 lg:gap-2 xl:gap-2.5 2xl:gap-4">
           <MarketClocks />
+          <TalkLiveButton className="hidden lg:flex" />
           <Button
             type="button"
             variant="ghost"
@@ -283,7 +292,7 @@ export function SiteHeader({ home = "" }: { home?: string }) {
               to="/"
               hash="contact"
               onClick={() => setMenuOpen(false)}
-              className="py-4 transition-colors hover:text-primary"
+              className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
             >
               Contact Us
             </Link>
@@ -291,11 +300,17 @@ export function SiteHeader({ home = "" }: { home?: string }) {
             <a
               href="#contact"
               onClick={() => setMenuOpen(false)}
-              className="py-4 transition-colors hover:text-primary"
+              className="border-b border-foreground/10 py-4 transition-colors hover:text-primary"
             >
               Contact Us
             </a>
           )}
+          <div className="pt-3 pb-2">
+            <TalkLiveButton
+              className="w-full justify-center"
+              onClick={() => setMenuOpen(false)}
+            />
+          </div>
         </nav>
       )}
     </header>

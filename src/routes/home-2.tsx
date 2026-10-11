@@ -621,8 +621,9 @@ function Homepage() {
             >
               <div className="grid gap-5 sm:grid-cols-2 sm:gap-7">
                 <label className="enquiry-field group relative block">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    Full Name
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>FULL NAME</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="name"
@@ -635,8 +636,9 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    Email
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>EMAIL</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="email"
@@ -650,13 +652,16 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block sm:col-span-2">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    CELL PHONE
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>CELL PHONE</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <input
                     name="subject"
-                    type="text"
-                    className="peer w-full border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent"
+                    type="tel"
+                    required
+                    placeholder="(555) 000-0000"
+                    className="peer w-full border-b border-primary/25 bg-transparent py-3 text-base text-foreground outline-none transition-colors duration-300 focus:border-transparent placeholder:text-muted-foreground/40"
                   />
                   <span
                     aria-hidden
@@ -664,8 +669,9 @@ function Homepage() {
                   />
                 </label>
                 <label className="enquiry-field group relative block sm:col-span-2">
-                  <span className="mb-3 block text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
-                    DIRECT MESSAGE TO LEADERSHIP
+                  <span className="mb-3 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground transition-colors duration-300 group-focus-within:text-primary">
+                    <span>DIRECT MESSAGE TO LEADERSHIP</span>
+                    <span className="text-primary font-bold text-sm leading-none select-none" aria-label="required">*</span>
                   </span>
                   <textarea
                     name="message"
@@ -679,14 +685,19 @@ function Homepage() {
                   />
                 </label>
               </div>
-              <Button
+              <button
                 type="submit"
                 disabled={sending === "enquiry"}
-                className="luxury-btn-primary group mt-9 h-14 w-full rounded-lg text-[12px] font-bold uppercase tracking-[0.18em]"
+                className="leadership-submit-btn group mt-9 relative flex h-16 w-full items-center justify-between rounded-lg px-6 sm:px-8 text-[#0d0d0f] transition-all duration-300 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {sending === "enquiry" ? "Sending..." : "SUBMIT TO LEADERSHIP"}{" "}
-                <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1.5" />
-              </Button>
+                <span className="leadership-btn-shimmer" aria-hidden="true" />
+                <span className="font-sans text-[13px] sm:text-[14px] font-extrabold uppercase tracking-[0.22em] text-[#0d0d0f] drop-shadow-[0_1px_1px_rgba(255,255,255,0.4)]">
+                  {sending === "enquiry" ? "SENDING..." : "SUBMIT TO LEADERSHIP"}
+                </span>
+                <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-black text-[#f3d078] border border-[#f3d078]/60 shadow-[0_2px_8px_rgba(0,0,0,0.6)] transition-all duration-300 group-hover:scale-110 group-hover:bg-black group-hover:text-white group-hover:border-white group-hover:shadow-[0_0_16px_rgba(255,215,0,0.7)]">
+                  <ArrowRight className="size-5 stroke-[2.75] transition-transform duration-300 group-hover:translate-x-1" />
+                </span>
+              </button>
               {sentMsg?.form === "enquiry" && (
                 <p
                   role="status"

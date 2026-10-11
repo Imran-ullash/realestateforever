@@ -81,8 +81,8 @@
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(0.28 0.008 80);
-  --input: oklch(0.22 0.006 80);
+  --border: oklch(0.42 0.015 80);
+  --input: oklch(0.35 0.012 80);
   --ring: oklch(0.704 0.04 256.788);
   --shadow-access-gold: 0 0 10px color-mix(in oklab, var(--primary) 70%, transparent), 0 0 34px color-mix(in oklab, var(--primary) 38%, transparent), 0 0 70px color-mix(in oklab, var(--primary) 18%, transparent), inset 0 0 12px color-mix(in oklab, var(--primary) 15%, transparent);
   --shadow-access-gold-bright: 0 0 16px color-mix(in oklab, var(--primary) 95%, transparent), 0 0 54px color-mix(in oklab, var(--primary) 55%, transparent), 0 0 100px color-mix(in oklab, var(--primary) 28%, transparent), inset 0 0 18px color-mix(in oklab, var(--primary) 24%, transparent);
@@ -97,7 +97,7 @@
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.968 0.007 247.896);
   --sidebar-accent-foreground: oklch(0.208 0.042 265.755);
-  --sidebar-border: oklch(0.929 0.013 255.508);
+  --sidebar-border: oklch(0.42 0.015 80);
   --sidebar-ring: oklch(0.704 0.04 256.788);
 }
 
@@ -118,8 +118,8 @@
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
   --destructive-foreground: oklch(0.984 0.003 247.858);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
+  --border: oklch(0.42 0.015 80);
+  --input: oklch(0.35 0.012 80);
   --ring: oklch(0.551 0.027 264.364);
   --chart-1: oklch(0.488 0.243 264.376);
   --chart-2: oklch(0.696 0.17 162.48);
@@ -132,7 +132,7 @@
   --sidebar-primary-foreground: oklch(0.984 0.003 247.858);
   --sidebar-accent: oklch(0.279 0.041 260.031);
   --sidebar-accent-foreground: oklch(0.984 0.003 247.858);
-  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-border: oklch(0.42 0.015 80);
   --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
@@ -173,7 +173,7 @@
 .luxury-card-depth {
   position: relative;
   background: linear-gradient(165deg, rgba(28, 28, 30, 0.65) 0%, rgba(15, 15, 17, 0.92) 100%);
-  border: 1px solid rgba(190, 149, 67, 0.16);
+  border: 1px solid rgba(190, 149, 67, 0.35);
   box-shadow:
     0 1px 3px -1px rgba(0, 0, 0, 0.6),
     0 6px 18px -3px rgba(0, 0, 0, 0.7),
@@ -187,13 +187,13 @@
 
 .luxury-card-depth:hover {
   transform: translateY(-4px);
-  border-color: rgba(190, 149, 67, 0.42);
+  border-color: rgba(212, 175, 55, 0.65);
   box-shadow:
     0 2px 6px -1px rgba(0, 0, 0, 0.6),
     0 14px 28px -4px rgba(0, 0, 0, 0.82),
     0 32px 56px -12px rgba(0, 0, 0, 0.95),
-    0 0 28px -4px rgba(190, 149, 67, 0.18),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+    0 0 28px -4px rgba(190, 149, 67, 0.28),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
 }
 
 /* Luxury 3D Metallic Primary Button */
@@ -228,6 +228,62 @@
   box-shadow:
     0 1px 2px rgba(0, 0, 0, 0.6),
     inset 0 2px 4px rgba(0, 0, 0, 0.35);
+}
+
+/* Executive Leadership Submit Button */
+.leadership-submit-btn {
+  position: relative;
+  background: linear-gradient(180deg, #fce28b 0%, #d4a745 42%, #ab8027 100%);
+  border: 1px solid #ffd700;
+  box-shadow:
+    0 4px 18px rgba(181, 134, 43, 0.45),
+    0 10px 32px rgba(0, 0, 0, 0.75),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.leadership-submit-btn:hover {
+  background: linear-gradient(180deg, #fff0a8 0%, #e0b44f 42%, #ba8a2c 100%);
+  border-color: #ffffff;
+  box-shadow:
+    0 6px 26px rgba(212, 175, 55, 0.65),
+    0 16px 45px rgba(0, 0, 0, 0.85),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.leadership-submit-btn:active {
+  transform: translateY(1px);
+  box-shadow:
+    0 2px 10px rgba(181, 134, 43, 0.4),
+    inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Shimmer beam across leadership button */
+.leadership-btn-shimmer {
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.15) 30%,
+    rgba(255, 255, 255, 0.65) 50%,
+    rgba(255, 255, 255, 0.15) 70%,
+    transparent 100%
+  );
+  transform: skewX(-25deg);
+  pointer-events: none;
+}
+
+.leadership-submit-btn:hover .leadership-btn-shimmer {
+  left: 200%;
+  transition: left 0.85s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Luxury Outline Button */
@@ -284,7 +340,7 @@
 /* Subtle 3D Glass Panel */
 .luxury-glass-panel {
   background: linear-gradient(170deg, rgba(22, 22, 25, 0.82) 0%, rgba(13, 13, 15, 0.94) 100%);
-  border: 1px solid rgba(190, 149, 67, 0.24);
+  border: 1px solid rgba(190, 149, 67, 0.38);
   box-shadow:
     0 4px 20px -2px rgba(0, 0, 0, 0.7),
     0 18px 44px -8px rgba(0, 0, 0, 0.88),
@@ -296,7 +352,7 @@
 /* Luxury Input Field Depth */
 .luxury-input-depth {
   background: linear-gradient(180deg, rgba(16, 16, 18, 0.85) 0%, rgba(10, 10, 12, 0.95) 100%);
-  border: 1px solid rgba(190, 149, 67, 0.22);
+  border: 1px solid rgba(190, 149, 67, 0.36);
   box-shadow:
     inset 0 1px 3px rgba(0, 0, 0, 0.6),
     inset 0 0 8px rgba(0, 0, 0, 0.3),
@@ -316,7 +372,7 @@
 /* Luxury Tag / Badge */
 .luxury-badge {
   background: linear-gradient(180deg, rgba(28, 28, 32, 0.92) 0%, rgba(15, 15, 18, 0.96) 100%);
-  border: 1px solid rgba(190, 149, 67, 0.38);
+  border: 1px solid rgba(190, 149, 67, 0.48);
   box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
@@ -530,7 +586,7 @@ input:-webkit-autofill:active {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  border: 1px solid rgba(212, 175, 55, 0.45);
+  border: 1px solid rgba(212, 175, 55, 0.6);
   box-shadow: 
     0 0 8px rgba(212, 175, 55, 0.25),
     inset 0 0 8px rgba(212, 175, 55, 0.1);
@@ -607,6 +663,43 @@ input:-webkit-autofill:active {
   100% {
     transform: translate(-50%, -50%) rotate(360deg);
   }
+}
+
+/* Traveling Gold Border Beam for TALK TO US LIVE Header Button (Continuous Orbiting Beam) */
+.talk-live-border-beam {
+  position: absolute;
+  inset: -1px;
+  border-radius: 9999px;
+  padding: 1.5px;
+  pointer-events: none;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  z-index: 10;
+  filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.8));
+}
+
+.talk-live-border-beam::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 420px;
+  height: 420px;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 240deg,
+    rgba(212, 175, 55, 0.35) 280deg,
+    #ffd700 325deg,
+    #ffffff 350deg,
+    #ffd700 358deg,
+    transparent 360deg
+  );
+  animation: gold-beam-spin 2.8s linear infinite;
 }
 
 /* Content Protection & Anti-Copy System */

@@ -46,9 +46,8 @@ export function VehicleInventory() {
                 onClick={() => {
                   setTab(t.key);
                 }}
-                className={`h-9 shrink-0 rounded-md px-3.5 text-[11px] font-bold uppercase tracking-widest sm:h-10 sm:px-4.5 ${
-                  tab === t.key ? "luxury-btn-primary" : "luxury-btn-outline"
-                }`}
+                className={`h-9 shrink-0 rounded-md px-3.5 text-[11px] font-bold uppercase tracking-widest sm:h-10 sm:px-4.5 ${tab === t.key ? "luxury-btn-primary" : "luxury-btn-outline"
+                  }`}
               >
                 {t.label}
               </Button>
@@ -68,8 +67,10 @@ export function VehicleInventory() {
         {shown.map((v) => (
           <article
             key={v.id}
-            className="reveal-up group min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden"
+            className="reveal-up group relative min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden"
           >
+            <span className="gold-box-border" aria-hidden="true" />
+            <span className="gold-pulse-line" aria-hidden="true" />
             <div className="relative aspect-[16/10] luxury-image-frame overflow-hidden bg-muted">
               {v.image && (
                 <img

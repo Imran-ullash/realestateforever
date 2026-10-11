@@ -3,30 +3,32 @@ import {
   ArrowDown,
   ArrowRight,
   Building2,
+  Car,
   CheckCircle2,
   ChevronLeft,
   ChevronRight,
+  ChevronUp,
   Gem,
   Home,
   Images,
   KeyRound,
   MapPin,
   Quote,
-  ChevronUp,
   Search,
   Send,
+  SlidersHorizontal,
   TrendingUp,
   Video,
   X,
 } from "lucide-react";
-import { useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { getComingSoonContent } from "@/lib/gate.functions";
 import { getVisitToken } from "@/lib/visit-token";
 import { sendFormEmail } from "@/lib/mail.functions";
 import { BrandLogo } from "@/components/brand-logo";
 import { SiteHeader } from "@/components/site-header";
 import { Button } from "@/components/ui/button";
-import { VehicleInventory } from "@/components/vehicle-inventory";
+import { getVehicleInventory, type Vehicle, type VehicleCategory } from "@/lib/vehicles.functions";
 import { AboutImageSlider } from "@/components/about-image-slider";
 import { PropertyGalleryModal } from "@/components/property-gallery-modal";
 import homeMainPoster from "@/assets/home-main-poster.jpg.asset.json";
@@ -149,6 +151,19 @@ const testimonials = [
   },
 ];
 
+const SHOW_ENTRY_FEE = false;
+const SHOW_LOCATION = false;
+const money = (n: number | null) =>
+  n == null ? "—" : n.toLocaleString("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+
+const vehicleTabs: { key: "all" | VehicleCategory; label: string }[] = [
+  { key: "all", label: "All Fleet" },
+  { key: "cars", label: "Cars & Trucks" },
+  { key: "boats", label: "Boats" },
+  { key: "rvs", label: "RVs & Trailers" },
+  { key: "equipment", label: "Heavy Equipment" },
+];
+
 export const Route = createFileRoute("/")({
   ssr: false,
   loader: async () => {
@@ -181,17 +196,55 @@ export const Route = createFileRoute("/")({
 function Homepage() {
   const content = Route.useLoaderData();
   const [search, setSearch] = useState("");
+  const [inventoryTab, setInventoryTab] = useState<"all" | "properties" | "vehicles">("all");
+  const [vehicleCategory, setVehicleCategory] = useState<"all" | VehicleCategory>("all");
+  const [vehicles, setVehicles] = useState<Vehicle[] | null>(null);
 
-  const filteredListings = listings.filter((listing) => {
+  useEffect(() => {
+    let alive = true;
+    getVehicleInventory()
+      .then((r) => {
+        if (alive && r?.items) setVehicles(r.items);
+      })
+      .catch(() => {
+        if (alive) setVehicles([]);
+      });
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const filteredListings = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return true;
-    const haystack = `${listing.city} ${listing.state} ${listing.zip} ${listing.type} ${listing.lister}`.toLowerCase();
-    return query
-      .split(/[\s,]+/)
-      .filter(Boolean)
-      .every((term) => haystack.includes(term));
-  });
+    if (!query) return listings;
+    const terms = query.split(/[\s,]+/).filter(Boolean);
+    return listings.filter((listing) => {
+      const haystack = `${listing.city} ${listing.state} ${listing.zip} ${listing.type} ${listing.lister}`.toLowerCase();
+      return terms.every((term) => haystack.includes(term));
+    });
+  }, [search]);
+
+  const filteredVehicles = useMemo(() => {
+    const list = vehicles ?? [];
+    return list.filter((v) => {
+      if (vehicleCategory !== "all" && v.category !== vehicleCategory) return false;
+      const query = search.trim().toLowerCase();
+      if (!query) return true;
+      const haystack = `${v.title} ${v.subtitle ?? ""} ${v.category} ${v.location ?? ""} ${v.financing ?? ""}`.toLowerCase();
+      const terms = query.split(/[\s,]+/).filter(Boolean);
+      return terms.every((term) => haystack.includes(term));
+    });
+  }, [vehicles, vehicleCategory, search]);
+
   const visibleListings = filteredListings;
+  const visibleVehicles = filteredVehicles;
+
+  const totalMatchingCount =
+    inventoryTab === "all"
+      ? visibleListings.length + visibleVehicles.length
+      : inventoryTab === "properties"
+      ? visibleListings.length
+      : visibleVehicles.length;
 
   const updateSearch = (value: string) => {
     setSearch(value);
@@ -207,8 +260,8 @@ function Homepage() {
       listing.images && listing.images.length > 0
         ? listing.images
         : homeListingPhotos[listing.id]
-        ? [homeListingPhotos[listing.id]!]
-        : [listing.image];
+          ? [homeListingPhotos[listing.id]!]
+          : [listing.image];
     imgs.forEach((url, i) => items.push({ type: "image", url, label: `Photo ${i + 1}` }));
     if (listing.videos && listing.videos.length > 0) {
       listing.videos.forEach((url, i) => items.push({ type: "video", url, label: `Video ${i + 1}` }));
@@ -393,11 +446,10 @@ function Homepage() {
                 {sentMsg?.form === "hero" && (
                   <div
                     role="status"
-                    className={`mb-3.5 rounded-md p-2.5 text-xs font-medium ${
-                      sentMsg.ok
+                    className={`mb-3.5 rounded-md p-2.5 text-xs font-medium ${sentMsg.ok
                         ? "bg-primary/10 border border-primary/40 text-primary"
                         : "bg-destructive/10 border border-destructive/40 text-destructive"
-                    }`}
+                      }`}
                   >
                     {sentMsg.ok
                       ? "✓ Your inquiry has been received. Our team will connect with you shortly."
@@ -583,28 +635,103 @@ function Homepage() {
             <div className="mb-3 flex items-center gap-3 sm:mb-4">
               <span className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(190,149,67,0.7)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-primary sm:text-[12px] sm:tracking-[0.32em]">
-                Active marketplace
+                Verified Marketplace · All Inventory
               </p>
             </div>
             <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">
-              Curated opportunities
+              Curated Opportunities & Assets
             </h2>
           </div>
 
           <p className="max-w-lg text-pretty text-[15px] leading-7 text-muted-foreground/90 sm:text-base">
-            Explore verified opportunities by market and review the core figures before requesting the complete details.
+            Explore verified off-market real estate investments and structured luxury assets in one seamless portfolio.
           </p>
         </div>
 
-        <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-4.5 md:p-5">
-          <div className="grid gap-3 sm:gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+        <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-5">
+          {/* Top Level Category Selector */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-primary/15 pb-4">
+            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+              <button
+                type="button"
+                onClick={() => setInventoryTab("all")}
+                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  inventoryTab === "all"
+                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
+                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
+                }`}
+              >
+                <span>All Inventory</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                    inventoryTab === "all" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
+                  }`}
+                >
+                  {listings.length + (vehicles?.length ?? 0)}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInventoryTab("properties")}
+                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  inventoryTab === "properties"
+                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
+                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
+                }`}
+              >
+                <Building2 className="size-3.5" />
+                <span>Real Estate</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                    inventoryTab === "properties" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
+                  }`}
+                >
+                  {listings.length}
+                </span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => setInventoryTab("vehicles")}
+                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
+                  inventoryTab === "vehicles"
+                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
+                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
+                }`}
+              >
+                <Car className="size-3.5" />
+                <span>Luxury Vehicles</span>
+                <span
+                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
+                    inventoryTab === "vehicles" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
+                  }`}
+                >
+                  {vehicles?.length ?? 0}
+                </span>
+              </button>
+            </div>
+
+            <p className="whitespace-nowrap font-sans text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
+              <span className="text-primary font-semibold">{totalMatchingCount}</span> active {totalMatchingCount === 1 ? "asset" : "assets"}
+            </p>
+          </div>
+
+          {/* Search bar + Vehicle category sub-chips */}
+          <div className="mt-4 grid gap-3 sm:gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
             <label className="luxury-input-depth flex h-11 items-center gap-3 rounded-md px-3.5 sm:px-4">
               <Search className="size-4 shrink-0 text-primary" />
-              <span className="sr-only">Search city, state, or ZIP code</span>
+              <span className="sr-only">Search inventory</span>
               <input
                 value={search}
                 onChange={(event) => updateSearch(event.target.value)}
-                placeholder="Search city, state or ZIP"
+                placeholder={
+                  inventoryTab === "properties"
+                    ? "Search city, state or ZIP..."
+                    : inventoryTab === "vehicles"
+                    ? "Search make, model, type or location..."
+                    : "Search by city, state, ZIP, vehicle make or model..."
+                }
                 className="min-w-0 flex-1 bg-transparent text-[15px] text-foreground outline-none placeholder:text-muted-foreground/75"
               />
               {search && (
@@ -618,133 +745,212 @@ function Homepage() {
                 </button>
               )}
             </label>
-            <p className="whitespace-nowrap font-sans text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
-              <span className="text-primary font-semibold">{filteredListings.length}</span> active
-            </p>
+
+            {(inventoryTab === "vehicles" || inventoryTab === "all") && (
+              <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
+                {vehicleTabs.map((t) => (
+                  <button
+                    key={t.key}
+                    type="button"
+                    onClick={() => setVehicleCategory(t.key)}
+                    className={`h-9 shrink-0 rounded-md px-3 text-[10px] font-bold uppercase tracking-wider transition-colors ${
+                      vehicleCategory === t.key
+                        ? "bg-primary/20 text-primary border border-primary/50 shadow-sm"
+                        : "border border-border/70 text-muted-foreground hover:text-foreground hover:border-primary/30"
+                    }`}
+                  >
+                    {t.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
+        {/* Unified Inventory Grid */}
         <div className="grid gap-5 sm:grid-cols-2 sm:gap-8 lg:grid-cols-4">
-          {visibleListings.map((listing) => {
-            const mediaList = getListingMediaList(listing);
-            const hasMultipleMedia = mediaList.length > 1;
-            const currentIndex = (cardPhotoIndexes[listing.id] ?? 0) % (mediaList.length || 1);
-            const currentMedia = mediaList[currentIndex] ?? mediaList[0]!;
-            const totalPhotos = listing.images && listing.images.length > 0 ? listing.images.length : 1;
-            const totalVideos = listing.videos && listing.videos.length > 0 ? listing.videos.length : 0;
-            const isVideo = currentMedia.type === "video";
-            const videoNumber = isVideo ? currentIndex - totalPhotos + 1 : 0;
+          {/* Real Estate Properties */}
+          {(inventoryTab === "all" || inventoryTab === "properties") &&
+            visibleListings.map((listing) => {
+              const mediaList = getListingMediaList(listing);
+              const hasMultipleMedia = mediaList.length > 1;
+              const currentIndex = (cardPhotoIndexes[listing.id] ?? 0) % (mediaList.length || 1);
+              const currentMedia = mediaList[currentIndex] ?? mediaList[0]!;
+              const totalPhotos = listing.images && listing.images.length > 0 ? listing.images.length : 1;
+              const totalVideos = listing.videos && listing.videos.length > 0 ? listing.videos.length : 0;
+              const isVideo = currentMedia.type === "video";
+              const videoNumber = isVideo ? currentIndex - totalPhotos + 1 : 0;
 
-            return (
-              <article
-                key={listing.id}
-                className="reveal-up group min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden transition-all duration-300 hover:border-primary/50"
-              >
-                <div
-                  className="relative aspect-[16/10] luxury-image-frame overflow-hidden cursor-pointer group/img bg-black"
-                  onClick={() => openGallery(listing, currentIndex)}
-                  title="Click to view full photo and video gallery"
+              return (
+                <article
+                  key={listing.id}
+                  className="reveal-up group relative min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden transition-all duration-300 hover:border-transparent"
                 >
-                  {isVideo ? (
-                    <div className="relative size-full bg-black flex items-center justify-center">
-                      <video
-                        key={currentMedia.url}
+                  <span className="gold-box-border" aria-hidden="true" />
+                  <span className="gold-pulse-line" aria-hidden="true" />
+                  <div
+                    className="relative aspect-[16/10] luxury-image-frame overflow-hidden cursor-pointer group/img bg-black"
+                    onClick={() => openGallery(listing, currentIndex)}
+                    title="Click to view full photo and video gallery"
+                  >
+                    {isVideo ? (
+                      <div className="relative size-full bg-black flex items-center justify-center">
+                        <video
+                          key={currentMedia.url}
+                          src={currentMedia.url}
+                          controls
+                          controlsList="nodownload"
+                          disablePictureInPicture
+                          playsInline
+                          className="size-full object-cover"
+                          onClick={(e) => e.stopPropagation()}
+                          onContextMenu={(e) => e.preventDefault()}
+                        />
+                      </div>
+                    ) : (
+                      <img
                         src={currentMedia.url}
-                        controls
-                        controlsList="nodownload"
-                        disablePictureInPicture
-                        playsInline
-                        className="size-full object-cover"
-                        onClick={(e) => e.stopPropagation()}
-                        onContextMenu={(e) => e.preventDefault()}
+                        alt={`Property in ${listing.city}, ${listing.state} ${listing.zip}`}
+                        className="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                       />
-                    </div>
-                  ) : (
-                    <img
-                      src={currentMedia.url}
-                      alt={`Property in ${listing.city}, ${listing.state} ${listing.zip}`}
-                      className="size-full object-cover object-top transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                    />
-                  )}
-                  {hasMultipleMedia && (
-                    <>
-                      <span className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[11px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md pointer-events-none">
-                        {isVideo ? (
-                          <>
-                            <Video className="size-3.5 text-primary" />
-                            <span>
-                              Video {videoNumber} of {totalVideos}
-                            </span>
-                          </>
-                        ) : (
-                          <>
-                            <Images className="size-3.5 text-primary" />
-                            <span>
-                              Photo {currentIndex + 1} of {totalPhotos}
-                              {totalVideos > 0 && ` · ${totalVideos} Videos`}
-                            </span>
-                          </>
-                        )}
-                      </span>
-                      <button
-                        type="button"
-                        onClick={(e) => prevCardMedia(e, listing)}
-                        aria-label="Previous item"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
-                      >
-                        <ChevronLeft className="size-4" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => nextCardMedia(e, listing)}
-                        aria-label="Next item"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
-                      >
-                        <ChevronRight className="size-4" />
-                      </button>
-                    </>
-                  )}
-                </div>
-
-                <div
-                  className="flex flex-1 flex-col p-5 sm:p-6 cursor-pointer"
-                  onClick={() => openGallery(listing, currentIndex)}
-                >
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <h3 className="min-w-0 flex-1 basis-28 break-words font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
-                      {listing.city}, {listing.state} {listing.zip}
-                    </h3>
+                    )}
+                    {hasMultipleMedia && (
+                      <>
+                        <span className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[11px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md pointer-events-none">
+                          {isVideo ? (
+                            <>
+                              <Video className="size-3.5 text-primary" />
+                              <span>
+                                Video {videoNumber} of {totalVideos}
+                              </span>
+                            </>
+                          ) : (
+                            <>
+                              <Images className="size-3.5 text-primary" />
+                              <span>
+                                Photo {currentIndex + 1} of {totalPhotos}
+                                {totalVideos > 0 && ` · ${totalVideos} Videos`}
+                              </span>
+                            </>
+                          )}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => prevCardMedia(e, listing)}
+                          aria-label="Previous item"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronLeft className="size-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => nextCardMedia(e, listing)}
+                          aria-label="Next item"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronRight className="size-4" />
+                        </button>
+                      </>
+                    )}
                   </div>
 
-                  {(listing.beds || listing.baths || listing.area) && (
-                    <p className="mt-2 text-[13px] tracking-wide text-muted-foreground/90 font-medium">
-                      {listing.beds && `${listing.beds} Beds`}
-                      {listing.baths && ` · ${listing.baths} Baths`}
-                      {listing.area && ` · ${listing.area} sq ft`}
-                    </p>
-                  )}
-
-                  {listing.lister && (
-                    <div className="mt-2.5 border-t border-primary/15 pt-2.5">
-                      <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                        {listing.lister}
-                      </span>
+                  <div
+                    className="flex flex-1 flex-col p-5 sm:p-6 cursor-pointer"
+                    onClick={() => openGallery(listing, currentIndex)}
+                  >
+                    <div className="flex flex-wrap items-start justify-between gap-3">
+                      <h3 className="min-w-0 flex-1 basis-28 break-words font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                        {listing.city}, {listing.state} {listing.zip}
+                      </h3>
                     </div>
+
+                    {(listing.beds || listing.baths || listing.area) && (
+                      <p className="mt-2 text-[13px] tracking-wide text-muted-foreground/90 font-medium">
+                        {listing.beds && `${listing.beds} Beds`}
+                        {listing.baths && ` · ${listing.baths} Baths`}
+                        {listing.area && ` · ${listing.area} sq ft`}
+                      </p>
+                    )}
+
+                    {listing.lister && (
+                      <div className="mt-2.5 border-t border-primary/15 pt-2.5">
+                        <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
+                          {listing.lister}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
+
+          {/* Luxury Vehicles & Fleet in the Same Flowing Grid */}
+          {(inventoryTab === "all" || inventoryTab === "vehicles") &&
+            visibleVehicles.map((v) => (
+              <article
+                key={v.id}
+                className="reveal-up group relative min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden transition-all duration-300 hover:border-transparent"
+              >
+                <span className="gold-box-border" aria-hidden="true" />
+                <span className="gold-pulse-line" aria-hidden="true" />
+                <div className="relative aspect-[16/10] luxury-image-frame overflow-hidden bg-black">
+                  {v.image ? (
+                    <img
+                      src={v.image}
+                      alt={v.title}
+                      loading="lazy"
+                      className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                    />
+                  ) : (
+                    <div className="flex size-full items-center justify-center bg-black/60">
+                      <Car className="size-10 text-primary/40" />
+                    </div>
+                  )}
+                  <span className="absolute left-2.5 top-2.5 z-10 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-primary shadow-md backdrop-blur-md">
+                    {v.category}
+                  </span>
+                </div>
+
+                <div className="flex flex-1 flex-col p-5 sm:p-6">
+                  <div className="flex flex-wrap items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1 basis-28">
+                      <h3 className="font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                        {v.title}
+                      </h3>
+                      {v.subtitle && <p className="mt-1 truncate text-[13px] text-muted-foreground/80">{v.subtitle}</p>}
+                    </div>
+                    {SHOW_ENTRY_FEE && (
+                      <div className="shrink-0 text-right">
+                        <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/85 sm:text-[11px]">
+                          Entry
+                        </p>
+                        <p className="font-display text-xl font-medium text-primary sm:text-2xl drop-shadow-[0_1px_8px_rgba(190,149,67,0.3)]">
+                          {money(v.entryFee)}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {SHOW_LOCATION && v.location && (
+                    <p className="mt-4 flex items-center gap-2 text-[13px] text-muted-foreground/85">
+                      <MapPin className="size-3.5 text-primary" />
+                      {v.location}
+                    </p>
                   )}
                 </div>
               </article>
-            );
-          })}
+            ))}
         </div>
 
-        {filteredListings.length === 0 && (
+        {totalMatchingCount === 0 && (
           <div className="rounded-lg luxury-glass-panel px-6 py-14 text-center">
-            <p className="font-display text-2xl sm:text-3xl text-foreground">No properties match that search.</p>
-            <p className="mt-3 text-[15px] text-muted-foreground">Try another city, state or ZIP code.</p>
+            <p className="font-display text-2xl sm:text-3xl text-foreground">No assets match that search.</p>
+            <p className="mt-3 text-[15px] text-muted-foreground">Try another keyword, city, state or ZIP code.</p>
             <Button
               type="button"
               onClick={() => {
                 updateSearch("");
+                setVehicleCategory("all");
               }}
               className="luxury-btn-outline mt-6 h-11 rounded-md px-8 text-[12px] font-bold uppercase tracking-[0.2em]"
             >
@@ -754,8 +960,6 @@ function Homepage() {
         )}
 
       </section>
-
-      <VehicleInventory />
 
       {/* Testimonials */}
       <section className="hidden  border-y border-border bg-card/20 px-5 py-16 sm:px-6 sm:py-24 md:px-10 md:py-32 lg:px-16">

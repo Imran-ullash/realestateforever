@@ -75,7 +75,7 @@ export const listings: Listing[] = [
     down: "",
     arv: "",
     type: "Off-Market",
-    lister: "Mike RE",
+    lister: "UHN Capital",
     isNew: true,
   },
   {
@@ -98,7 +98,7 @@ export const listings: Listing[] = [
     down: "",
     arv: "",
     type: "Off-Market",
-    lister: "Mike RE",
+    lister: "UHN Capital",
     isNew: true,
   },
   {
@@ -121,7 +121,7 @@ export const listings: Listing[] = [
     down: "",
     arv: "",
     type: "Off-Market",
-    lister: "Mike RE",
+    lister: "UHN Capital",
     isNew: true,
   },
   {
@@ -143,7 +143,7 @@ export const listings: Listing[] = [
     down: "",
     arv: "",
     type: "Off-Market",
-    lister: "Mike RE",
+    lister: "UHN Capital",
     isNew: true,
   },
   { id: 1, image: dealdeck01.url, city: "Acworth", state: "GA", zip: "30101", beds: "3", baths: "2.5", area: "1,780", entry: "$12,000", down: "3.1% Down", arv: "", type: "Subject To", lister: "Boulder Capital Investments", isNew: true },

@@ -151,7 +151,10 @@
     text-rendering: optimizeLegibility;
   }
 
-  h1, h2, h3, h4 {
+  h1,
+  h2,
+  h3,
+  h4 {
     letter-spacing: -0.015em;
     text-wrap: balance;
   }
@@ -171,15 +174,15 @@
   position: relative;
   background: linear-gradient(165deg, rgba(28, 28, 30, 0.65) 0%, rgba(15, 15, 17, 0.92) 100%);
   border: 1px solid rgba(190, 149, 67, 0.16);
-  box-shadow: 
+  box-shadow:
     0 1px 3px -1px rgba(0, 0, 0, 0.6),
     0 6px 18px -3px rgba(0, 0, 0, 0.7),
     0 18px 36px -8px rgba(0, 0, 0, 0.85),
     inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
     inset 0 0 16px 0 rgba(0, 0, 0, 0.4);
   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
-              border-color 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow 0.45s cubic-bezier(0.2, 0.8, 0.2, 1),
+    border-color 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 .luxury-card-depth:hover {
@@ -206,8 +209,8 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.45),
     inset 0 -1px 0 rgba(0, 0, 0, 0.3);
   transition: transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-              box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
-              filter 0.25s ease;
+    box-shadow 0.25s cubic-bezier(0.2, 0.8, 0.2, 1),
+    filter 0.25s ease;
   overflow: hidden;
 }
 
@@ -314,7 +317,7 @@
 .luxury-badge {
   background: linear-gradient(180deg, rgba(28, 28, 32, 0.92) 0%, rgba(15, 15, 18, 0.96) 100%);
   border: 1px solid rgba(190, 149, 67, 0.38);
-  box-shadow: 
+  box-shadow:
     0 2px 6px rgba(0, 0, 0, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.12);
   color: #dfba6d;
@@ -325,6 +328,7 @@
     opacity: 0;
     transform: translateY(18px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -336,6 +340,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -353,14 +358,17 @@
 .enquiry-form .enquiry-field:nth-child(2) {
   animation-delay: 70ms;
 }
+
 .enquiry-form .enquiry-field:nth-child(3) {
   animation-delay: 140ms;
 }
+
 .enquiry-form .enquiry-field:nth-child(4) {
   animation-delay: 210ms;
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -375,52 +383,230 @@
 }
 
 @keyframes access-gold-breathe {
-  0%, 100% { box-shadow: var(--shadow-access-gold); }
-  50% { box-shadow: var(--shadow-access-gold-bright); }
+
+  0%,
+  100% {
+    box-shadow: var(--shadow-access-gold);
+  }
+
+  50% {
+    box-shadow: var(--shadow-access-gold-bright);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .access-gold-frame,
-  .access-arrow-ring { animation: none; }
+  .access-arrow-ring {
+    animation: none;
+  }
 }
 
 /* Gold arrow submit button: idle halo breathing, hover shine sweep, click burst */
-.access-arrow-ring { animation: access-ring-breathe 2.8s ease-in-out infinite; }
-@keyframes access-ring-breathe {
-  0%, 100% { box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 35%, transparent), inset 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent); }
-  50% { box-shadow: 0 0 24px color-mix(in oklab, var(--primary) 70%, transparent), inset 0 0 10px color-mix(in oklab, var(--primary) 34%, transparent); }
+.access-arrow-ring {
+  animation: access-ring-breathe 2.8s ease-in-out infinite;
 }
-.access-arrow-btn:active .access-arrow-ring { animation: access-ring-burst 500ms ease-out; }
+
+@keyframes access-ring-breathe {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px color-mix(in oklab, var(--primary) 35%, transparent), inset 0 0 6px color-mix(in oklab, var(--primary) 18%, transparent);
+  }
+
+  50% {
+    box-shadow: 0 0 24px color-mix(in oklab, var(--primary) 70%, transparent), inset 0 0 10px color-mix(in oklab, var(--primary) 34%, transparent);
+  }
+}
+
+.access-arrow-btn:active .access-arrow-ring {
+  animation: access-ring-burst 500ms ease-out;
+}
+
 @keyframes access-ring-burst {
-  0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 65%, transparent); }
-  100% { box-shadow: 0 0 0 22px color-mix(in oklab, var(--primary) 0%, transparent); }
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklab, var(--primary) 65%, transparent);
+  }
+
+  100% {
+    box-shadow: 0 0 0 22px color-mix(in oklab, var(--primary) 0%, transparent);
+  }
 }
 
 /* Inventory map controls and markers */
-.inventory-map .leaflet-container { background: var(--color-muted); }
+.inventory-map .leaflet-container {
+  background: var(--color-muted);
+}
+
 /* Leaflet's own `.leaflet-marker-icon { display: block }` must not win, or marker text drifts to the top-left. */
-.inventory-map .leaflet-marker-icon.inventory-marker { display: flex; align-items: center; justify-content: center; text-align: center; border-radius: 50%; border: 1px solid var(--color-primary); background: var(--color-primary); color: var(--color-primary-foreground); font: 700 10px/1 var(--font-sans); letter-spacing: -0.01em; box-shadow: 0 2px 10px oklch(0 0 0 / 0.55); white-space: nowrap; }
-.inventory-map .leaflet-marker-icon.inventory-marker > span { display: block; line-height: 1; }
-.inventory-marker-selected { box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary), 0 4px 14px oklch(0 0 0 / 0.6); }
-.inventory-map .leaflet-popup-content-wrapper { padding: 0; border: 1px solid var(--color-primary); border-radius: 2px; background: var(--color-background); color: var(--color-foreground); }
-.inventory-map .leaflet-popup-content { margin: 0; }
-.inventory-popup img { display: block; width: 100%; height: 105px; object-fit: cover; }
-.inventory-popup-body { display: grid; gap: 4px; padding: 10px; font: 12px var(--font-sans); }
-.inventory-popup-body small { color: var(--color-primary); font-weight: 700; }
-.inventory-popup-body strong { font: 22px var(--font-display); }
-.inventory-popup-body em { color: var(--color-muted-foreground); font-size: 10px; font-style: normal; }
-.inventory-map .leaflet-popup-tip { background: var(--color-background); }
-.inventory-map .leaflet-control-zoom a { background: var(--color-background); color: var(--color-primary); border-color: var(--color-border); }
+.inventory-map .leaflet-marker-icon.inventory-marker {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 50%;
+  border: 1px solid var(--color-primary);
+  background: var(--color-primary);
+  color: var(--color-primary-foreground);
+  font: 700 10px/1 var(--font-sans);
+  letter-spacing: -0.01em;
+  box-shadow: 0 2px 10px oklch(0 0 0 / 0.55);
+  white-space: nowrap;
+}
+
+.inventory-map .leaflet-marker-icon.inventory-marker>span {
+  display: block;
+  line-height: 1;
+}
+
+.inventory-marker-selected {
+  box-shadow: 0 0 0 2px var(--color-background), 0 0 0 4px var(--color-primary), 0 4px 14px oklch(0 0 0 / 0.6);
+}
+
+.inventory-map .leaflet-popup-content-wrapper {
+  padding: 0;
+  border: 1px solid var(--color-primary);
+  border-radius: 2px;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+.inventory-map .leaflet-popup-content {
+  margin: 0;
+}
+
+.inventory-popup img {
+  display: block;
+  width: 100%;
+  height: 105px;
+  object-fit: cover;
+}
+
+.inventory-popup-body {
+  display: grid;
+  gap: 4px;
+  padding: 10px;
+  font: 12px var(--font-sans);
+}
+
+.inventory-popup-body small {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.inventory-popup-body strong {
+  font: 22px var(--font-display);
+}
+
+.inventory-popup-body em {
+  color: var(--color-muted-foreground);
+  font-size: 10px;
+  font-style: normal;
+}
+
+.inventory-map .leaflet-popup-tip {
+  background: var(--color-background);
+}
+
+.inventory-map .leaflet-control-zoom a {
+  background: var(--color-background);
+  color: var(--color-primary);
+  border-color: var(--color-border);
+}
 
 /* Prevent browser autofill from turning input background white */
 input:-webkit-autofill,
-input:-webkit-autofill:hover, 
+input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-text-fill-color: var(--color-foreground) !important;
   -webkit-box-shadow: 0 0 0 1000px hsl(0 0% 0% / 0.7) inset !important;
   box-shadow: 0 0 0 1000px hsl(0 0% 0% / 0.7) inset !important;
   transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Thin Gold Border & Traveling Beam Around All 4 Sides of the Box */
+.gold-box-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(212, 175, 55, 0.45);
+  box-shadow: 
+    0 0 8px rgba(212, 175, 55, 0.25),
+    inset 0 0 8px rgba(212, 175, 55, 0.1);
+  opacity: 0;
+  transition: opacity 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+  pointer-events: none;
+  z-index: 30;
+}
+
+.group:hover > .gold-box-border,
+.group:hover .gold-box-border {
+  opacity: 1;
+  animation: gold-box-pulse 1.8s ease-in-out infinite alternate;
+}
+
+@keyframes gold-box-pulse {
+  0% {
+    border-color: rgba(212, 175, 55, 0.4);
+    box-shadow: 0 0 6px rgba(212, 175, 55, 0.2), inset 0 0 6px rgba(212, 175, 55, 0.08);
+  }
+  100% {
+    border-color: rgba(255, 223, 115, 0.85);
+    box-shadow: 0 0 14px rgba(212, 175, 55, 0.55), inset 0 0 10px rgba(212, 175, 55, 0.2);
+  }
+}
+
+/* Thin Animated Beam that Races/Rounds Around the 4 Borders */
+.gold-pulse-line {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  pointer-events: none;
+  z-index: 31;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+}
+
+.group:hover > .gold-pulse-line,
+.group:hover .gold-pulse-line {
+  opacity: 1;
+}
+
+.gold-pulse-line::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 260%;
+  height: 260%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 260deg,
+    rgba(212, 175, 55, 0.4) 300deg,
+    #ffd700 335deg,
+    #ffffff 352deg,
+    #ffd700 358deg,
+    transparent 360deg
+  );
+  animation: gold-beam-spin 3s linear infinite;
+}
+
+@keyframes gold-beam-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
 }
 
 /* Content Protection & Anti-Copy System */
@@ -452,11 +638,10 @@ video {
 }
 
 @media print {
+
   html,
   body {
     display: none !important;
     visibility: hidden !important;
   }
 }
-
-

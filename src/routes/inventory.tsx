@@ -27,14 +27,16 @@ export const Route = createFileRoute("/inventory")({
     if (!content.unlocked) throw redirect({ to: "/welcome" });
     return content;
   },
-  head: () => ({ meta: [
-    { title: "RealEstateForever.com | Real Estate Investments." },
-    { name: "description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
-    { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
-    { property: "og:description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
-    { property: "og:type", content: "website" },
-    { name: "twitter:card", content: "summary_large_image" },
-  ] }),
+  head: () => ({
+    meta: [
+      { title: "RealEstateForever.com | Real Estate Investments." },
+      { name: "description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
+      { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
+      { property: "og:description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ]
+  }),
   component: InventoryPage,
 });
 
@@ -85,7 +87,7 @@ function InventoryPage() {
 
   useEffect(() => {
     let active = true;
-    getVehicleInventory().then((result) => { if (active && result.items.length) setVehicles(result.items); }).catch(() => {});
+    getVehicleInventory().then((result) => { if (active && result.items.length) setVehicles(result.items); }).catch(() => { });
     return () => { active = false; };
   }, []);
 
@@ -207,68 +209,72 @@ function InventoryPage() {
               const videoNumber = isVideo ? currentIndex - totalPhotos + 1 : 0;
 
               return (
-              <article key={item.key} ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }} className={`group min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`} role="button" tabIndex={0} aria-label={`Select ${item.listing.city}, ${item.listing.state} property`} aria-pressed={selectedKey === item.key} onClick={() => setSelectedKey(item.key)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}>
-                <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-black group/img">
-                  {isVideo ? (
-                    <video
-                      key={currentMedia.url}
-                      src={currentMedia.url}
-                      controls
-                      controlsList="nodownload"
-                      disablePictureInPicture
-                      playsInline
-                      className="size-full object-cover"
-                      onClick={(e) => e.stopPropagation()}
-                      onContextMenu={(e) => e.preventDefault()}
-                    />
-                  ) : (
-                    <img src={currentMedia.url} alt={`${item.listing.city}, ${item.listing.state} property`} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"/>
-                  )}
-                  <span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{item.listing.type}</span>
-                  {item.listing.isNew && <span className="absolute top-3 right-3 bg-primary px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">New</span>}
-                  {hasMultipleMedia && (
-                    <>
-                      <button
-                        type="button"
-                        onClick={(e) => { e.stopPropagation(); setGalleryListing(item.listing); }}
-                        className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[10px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all"
-                      >
-                        {isVideo ? (
-                          <>
-                            <Video className="size-3" /> Video {videoNumber}/{totalVideos}
-                          </>
-                        ) : (
-                          <>
-                            <Images className="size-3" /> Photo {currentIndex + 1}/{totalPhotos}
-                            {totalVideos > 0 && ` (+${totalVideos} Videos)`}
-                          </>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => prevCardMedia(e, item.listing)}
-                        aria-label="Previous item"
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
-                      >
-                        <ChevronLeft className="size-3.5" />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={(e) => nextCardMedia(e, item.listing)}
-                        aria-label="Next item"
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
-                      >
-                        <ChevronRight className="size-3.5" />
-                      </button>
-                    </>
-                  )}
-                </div>
-                <div className="p-4"><div className="flex items-start justify-between gap-2"><h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">{item.listing.city}, {item.listing.state}</h3><p className="shrink-0 font-display text-xl font-medium text-primary drop-shadow-[0_1px_6px_rgba(190,149,67,0.3)]">{item.listing.entry}</p></div><p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85"><MapPin className="size-3 text-primary" /> {item.listing.state} {item.listing.zip} <span className="ml-auto text-[10px] uppercase tracking-wider">Entry</span></p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85"><span className="flex items-center gap-1"><BedDouble className="size-3.5 text-primary" />{item.listing.beds} beds</span><span className="flex items-center gap-1"><Bath className="size-3.5 text-primary" />{item.listing.baths} baths</span><span className="flex items-center gap-1"><Ruler className="size-3.5 text-primary" />{item.listing.area} sq ft</span></div></div>
-              </article>
+                <article key={item.key} ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }} className={`group relative min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`} role="button" tabIndex={0} aria-label={`Select ${item.listing.city}, ${item.listing.state} property`} aria-pressed={selectedKey === item.key} onClick={() => setSelectedKey(item.key)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}>
+                  <span className="gold-box-border" aria-hidden="true" />
+                  <span className="gold-pulse-line" aria-hidden="true" />
+                  <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-black group/img">
+                    {isVideo ? (
+                      <video
+                        key={currentMedia.url}
+                        src={currentMedia.url}
+                        controls
+                        controlsList="nodownload"
+                        disablePictureInPicture
+                        playsInline
+                        className="size-full object-cover"
+                        onClick={(e) => e.stopPropagation()}
+                        onContextMenu={(e) => e.preventDefault()}
+                      />
+                    ) : (
+                      <img src={currentMedia.url} alt={`${item.listing.city}, ${item.listing.state} property`} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]" />
+                    )}
+                    <span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{item.listing.type}</span>
+                    {item.listing.isNew && <span className="absolute top-3 right-3 bg-primary px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground">New</span>}
+                    {hasMultipleMedia && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); setGalleryListing(item.listing); }}
+                          className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[10px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all"
+                        >
+                          {isVideo ? (
+                            <>
+                              <Video className="size-3" /> Video {videoNumber}/{totalVideos}
+                            </>
+                          ) : (
+                            <>
+                              <Images className="size-3" /> Photo {currentIndex + 1}/{totalPhotos}
+                              {totalVideos > 0 && ` (+${totalVideos} Videos)`}
+                            </>
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => prevCardMedia(e, item.listing)}
+                          aria-label="Previous item"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronLeft className="size-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => nextCardMedia(e, item.listing)}
+                          aria-label="Next item"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronRight className="size-3.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <div className="p-4"><div className="flex items-start justify-between gap-2"><h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">{item.listing.city}, {item.listing.state}</h3><p className="shrink-0 font-display text-xl font-medium text-primary drop-shadow-[0_1px_6px_rgba(190,149,67,0.3)]">{item.listing.entry}</p></div><p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85"><MapPin className="size-3 text-primary" /> {item.listing.state} {item.listing.zip} <span className="ml-auto text-[10px] uppercase tracking-wider">Entry</span></p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85"><span className="flex items-center gap-1"><BedDouble className="size-3.5 text-primary" />{item.listing.beds} beds</span><span className="flex items-center gap-1"><Bath className="size-3.5 text-primary" />{item.listing.baths} baths</span><span className="flex items-center gap-1"><Ruler className="size-3.5 text-primary" />{item.listing.area} sq ft</span></div></div>
+                </article>
               );
             })() : (
-              <article key={item.key} ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }} className={`group min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`} role="button" tabIndex={0} aria-label={`Select ${item.vehicle.title}`} aria-pressed={selectedKey === item.key} onClick={() => setSelectedKey(item.key)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}>
-                <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-muted">{item.vehicle.image ? <img src={item.vehicle.image} alt={item.vehicle.title} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"/> : <div className="flex size-full items-center justify-center"><Car className="size-10 text-primary" /></div>}<span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{item.vehicle.category}</span></div>
+              <article key={item.key} ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }} className={`group relative min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`} role="button" tabIndex={0} aria-label={`Select ${item.vehicle.title}`} aria-pressed={selectedKey === item.key} onClick={() => setSelectedKey(item.key)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}>
+                <span className="gold-box-border" aria-hidden="true" />
+                <span className="gold-pulse-line" aria-hidden="true" />
+                <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-muted">{item.vehicle.image ? <img src={item.vehicle.image} alt={item.vehicle.title} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]" /> : <div className="flex size-full items-center justify-center"><Car className="size-10 text-primary" /></div>}<span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{item.vehicle.category}</span></div>
                 <div className="p-4"><div className="flex items-start justify-between gap-2"><h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">{item.vehicle.title}</h3>{item.vehicle.entryFee != null && <p className="shrink-0 font-display text-xl font-medium text-primary drop-shadow-[0_1px_6px_rgba(190,149,67,0.3)]">{money(item.vehicle.entryFee)}</p>}</div><p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85"><MapPin className="size-3 text-primary" /> {item.vehicle.location ?? "Location on request"} {item.vehicle.entryFee != null && <span className="ml-auto text-[10px] uppercase tracking-wider">Entry</span>}</p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85">{item.vehicle.subtitle && <span className="flex items-center gap-1"><Car className="size-3.5 text-primary" />{item.vehicle.subtitle}</span>}{item.vehicle.financing && <span className="uppercase">{item.vehicle.financing}</span>}{item.vehicle.monthlyPayment != null && <span>{money(item.vehicle.monthlyPayment)}/mo</span>}</div></div>
               </article>
             ))}
@@ -277,8 +283,8 @@ function InventoryPage() {
       </div>
     </div>
     <div className="fixed bottom-5 left-1/2 z-[600] flex -translate-x-1/2 overflow-hidden border border-primary bg-background shadow-xl lg:hidden" aria-label="View mode">
-      <Button onClick={() => setMobileView("map")} variant={mobileView === "map" ? "default" : "ghost"} className="h-11 rounded-none px-5 text-[12px] uppercase hover:text-primary"><MapIcon className="size-4"/> Map</Button>
-      <Button onClick={() => setMobileView("list")} variant={mobileView === "list" ? "default" : "ghost"} className="h-11 rounded-none px-5 text-[12px] uppercase hover:text-primary"><List className="size-4"/> List</Button>
+      <Button onClick={() => setMobileView("map")} variant={mobileView === "map" ? "default" : "ghost"} className="h-11 rounded-none px-5 text-[12px] uppercase hover:text-primary"><MapIcon className="size-4" /> Map</Button>
+      <Button onClick={() => setMobileView("list")} variant={mobileView === "list" ? "default" : "ghost"} className="h-11 rounded-none px-5 text-[12px] uppercase hover:text-primary"><List className="size-4" /> List</Button>
     </div>
     <PropertyGalleryModal listing={galleryListing} onClose={() => setGalleryListing(null)} />
   </main>;

@@ -1,7 +1,7 @@
 // Tab session visit token. Persists in sessionStorage for the duration
 // of the browser tab/session so users never get prompted for password
 // while navigating, waiting, or refreshing. Cleared automatically when the tab is closed.
-const TOKEN_KEY = "ref-visit-token-v2";
+const TOKEN_KEY = "ref-visit-token-v3";
 let inMemoryToken = "";
 
 export function getVisitToken(): string {

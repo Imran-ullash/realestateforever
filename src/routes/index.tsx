@@ -651,9 +651,12 @@ function Homepage() {
                         key={currentMedia.url}
                         src={currentMedia.url}
                         controls
+                        controlsList="nodownload"
+                        disablePictureInPicture
                         playsInline
                         className="size-full object-cover"
                         onClick={(e) => e.stopPropagation()}
+                        onContextMenu={(e) => e.preventDefault()}
                       />
                     </div>
                   ) : (
@@ -722,15 +725,10 @@ function Homepage() {
                   )}
 
                   {listing.lister && (
-                    <div className="mt-2.5 flex items-center justify-between border-t border-primary/15 pt-2.5">
+                    <div className="mt-2.5 border-t border-primary/15 pt-2.5">
                       <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
                         {listing.lister}
                       </span>
-                      {hasMultipleMedia && (
-                        <span className="text-[11px] text-muted-foreground/80 group-hover:text-primary transition-colors">
-                          {totalVideos > 0 ? "View media & videos →" : "View photos →"}
-                        </span>
-                      )}
                     </div>
                   )}
                 </div>

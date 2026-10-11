@@ -111,9 +111,12 @@ export function PropertyGalleryModal({ listing, initialIndex = 0, onClose }: Pro
               key={currentMedia.url}
               src={currentMedia.url}
               controls
+              controlsList="nodownload"
+              disablePictureInPicture
               playsInline
               autoPlay
               className="max-h-[72vh] w-auto max-w-full rounded-lg"
+              onContextMenu={(e) => e.preventDefault()}
             />
           ) : (
             <img

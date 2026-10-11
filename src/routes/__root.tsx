@@ -14,6 +14,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { LuxuryConcierge } from "../components/luxury-concierge";
+import { ContentProtection } from "../components/content-protection";
 
 function NotFoundComponent() {
   return (
@@ -126,6 +127,7 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
+      <ContentProtection />
       {!isUnlock && <LuxuryConcierge />}
     </QueryClientProvider>
   );

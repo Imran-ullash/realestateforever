@@ -214,9 +214,12 @@ function InventoryPage() {
                       key={currentMedia.url}
                       src={currentMedia.url}
                       controls
+                      controlsList="nodownload"
+                      disablePictureInPicture
                       playsInline
                       className="size-full object-cover"
                       onClick={(e) => e.stopPropagation()}
+                      onContextMenu={(e) => e.preventDefault()}
                     />
                   ) : (
                     <img src={currentMedia.url} alt={`${item.listing.city}, ${item.listing.state} property`} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"/>

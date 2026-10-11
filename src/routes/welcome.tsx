@@ -10,7 +10,7 @@ import { BrandLogo } from "@/components/brand-logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { unlockSite } from "@/lib/gate.functions";
-import { setVisitToken } from "@/lib/visit-token";
+import { clearVisitToken, setVisitToken } from "@/lib/visit-token";
 
 export const Route = createFileRoute("/welcome")({
   head: () => {
@@ -45,6 +45,7 @@ function Welcome() {
   const lastCycleTimeRef = useRef(0);
 
   useEffect(() => {
+    clearVisitToken();
     setPassword("");
     setError(false);
 

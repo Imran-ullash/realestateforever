@@ -575,65 +575,17 @@ function Homepage() {
         <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-5">
           {/* Top Level Category Selector */}
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-primary/15 pb-4">
-            <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-              <button
-                type="button"
-                onClick={() => setInventoryTab("all")}
-                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  inventoryTab === "all"
-                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
-                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
-                }`}
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div
+                className="h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)] flex items-center gap-2"
               >
                 <span>All Inventory</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
-                    inventoryTab === "all" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
-                  }`}
+                  className="text-[10px] px-1.5 py-0.5 rounded-full font-semibold bg-black/25 text-primary-foreground"
                 >
                   {listings.length + (vehicles?.length ?? 0)}
                 </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setInventoryTab("properties")}
-                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  inventoryTab === "properties"
-                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
-                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
-                }`}
-              >
-                <Building2 className="size-3.5" />
-                <span>Real Estate</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
-                    inventoryTab === "properties" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
-                  }`}
-                >
-                  {listings.length}
-                </span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setInventoryTab("vehicles")}
-                className={`h-9 sm:h-10 px-4 rounded-md text-[11px] sm:text-[12px] font-bold uppercase tracking-wider transition-all flex items-center gap-2 ${
-                  inventoryTab === "vehicles"
-                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.45)]"
-                    : "border border-border/80 text-foreground/80 hover:text-foreground hover:border-primary/50 hover:bg-primary/5"
-                }`}
-              >
-                <Car className="size-3.5" />
-                <span>Luxury Vehicles</span>
-                <span
-                  className={`text-[10px] px-1.5 py-0.5 rounded-full font-semibold ${
-                    inventoryTab === "vehicles" ? "bg-black/25 text-primary-foreground" : "bg-primary/15 text-primary"
-                  }`}
-                >
-                  {vehicles?.length ?? 0}
-                </span>
-              </button>
+              </div>
             </div>
 
             <p className="whitespace-nowrap font-sans text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
@@ -641,21 +593,15 @@ function Homepage() {
             </p>
           </div>
 
-          {/* Search bar + Vehicle category sub-chips */}
-          <div className="mt-4 grid gap-3 sm:gap-4 lg:grid-cols-[1fr_auto] lg:items-center">
+          {/* Search bar */}
+          <div className="mt-4">
             <label className="luxury-input-depth flex h-11 items-center gap-3 rounded-md px-3.5 sm:px-4">
               <Search className="size-4 shrink-0 text-primary" />
               <span className="sr-only">Search inventory</span>
               <input
                 value={search}
                 onChange={(event) => updateSearch(event.target.value)}
-                placeholder={
-                  inventoryTab === "properties"
-                    ? "Search city, state or ZIP..."
-                    : inventoryTab === "vehicles"
-                    ? "Search make, model, type or location..."
-                    : "Search by city, state, ZIP, vehicle make or model..."
-                }
+                placeholder="Search by city, state, ZIP, make or model..."
                 className="min-w-0 flex-1 bg-transparent text-[15px] text-foreground outline-none placeholder:text-muted-foreground/75"
               />
               {search && (
@@ -669,25 +615,6 @@ function Homepage() {
                 </button>
               )}
             </label>
-
-            {(inventoryTab === "vehicles" || inventoryTab === "all") && (
-              <div className="-mx-1 flex gap-1.5 overflow-x-auto px-1 [scrollbar-width:none]">
-                {vehicleTabs.map((t) => (
-                  <button
-                    key={t.key}
-                    type="button"
-                    onClick={() => setVehicleCategory(t.key)}
-                    className={`h-9 shrink-0 rounded-md px-3 text-[10px] font-bold uppercase tracking-wider transition-colors ${
-                      vehicleCategory === t.key
-                        ? "bg-primary/20 text-primary border border-primary/50 shadow-sm"
-                        : "border border-border/70 text-muted-foreground hover:text-foreground hover:border-primary/30"
-                    }`}
-                  >
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-            )}
           </div>
         </div>
 

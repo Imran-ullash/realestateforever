@@ -4,12 +4,18 @@ import aboutOfficeSlide1 from "@/assets/about-office-slide-1.jpg";
 import aboutOfficeSlide2 from "@/assets/about-office-slide-2.jpg";
 import aboutOfficeSlide3 from "@/assets/about-office-slide-3.jpg";
 import aboutOfficeSlide4 from "@/assets/about-office-slide-4.jpg";
+import aboutOfficeSlide5 from "@/assets/about-office-slide-5.jpg";
 
 const SLIDES = [
   {
     src: aboutOfficeSlide4,
     alt: "RealEstateForever.com twilight oceanfront advisory suite",
     title: "Twilight Advisory Suite",
+  },
+  {
+    src: aboutOfficeSlide5,
+    alt: "RealEstateForever.com sunset grand reception and ocean panorama",
+    title: "Sunset Grand Reception",
   },
   {
     src: aboutOfficeSlide1,

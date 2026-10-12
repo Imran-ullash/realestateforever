@@ -70,10 +70,6 @@ export function PropertyGalleryModal({ listing, initialIndex = 0, onClose }: Pro
             {listing.beds && <span>{listing.beds} Beds</span>}
             {listing.baths && <span>· {listing.baths} Baths</span>}
             {listing.area && <span>· {listing.area} sq ft</span>}
-            {listing.lister && <span className="text-primary font-semibold">· {listing.lister}</span>}
-            <span className="text-primary/70 font-medium">
-              ({currentMedia.type === "video" ? "🎥 Video Walkthrough" : "📷 Photo"})
-            </span>
           </div>
         </div>
 

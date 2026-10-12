@@ -72,15 +72,19 @@ export function VehicleInventory() {
             <span className="gold-box-border" aria-hidden="true" />
             <span className="gold-pulse-line" aria-hidden="true" />
             <div className="relative aspect-[16/10] luxury-image-frame overflow-hidden bg-muted">
-              {v.image && (
+              {v.image || /bennington/i.test(v.title) ? (
                 <img
-                  src={v.image}
+                  src={v.image || "/vehicles/bennington-2022-boat.jpg"}
                   alt={v.title}
                   loading="lazy"
-                  onError={(e) => (e.currentTarget.style.display = "none")}
+                  onError={(e) => {
+                    if (/bennington/i.test(v.title) || v.category === "boats") {
+                      e.currentTarget.src = "/vehicles/bennington-2022-boat.jpg";
+                    }
+                  }}
                   className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
                 />
-              )}
+              ) : null}
             </div>
 
             <div className="flex flex-1 flex-col p-5 sm:p-6">

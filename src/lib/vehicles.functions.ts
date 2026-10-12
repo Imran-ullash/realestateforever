@@ -65,23 +65,32 @@ function parseBundle(js: string): Vehicle[] {
     const state = str(chunk, "state");
     const photo = chunk.match(/photos:\w+\("([^"]+)",(\d+)\)/);
     const photoList = chunk.match(/photos:\[\s*"([^"]+)"/);
-    const image = photo
+    const title = [year, make, model].filter(Boolean).join(" ") || id;
+    const subtitle = trim ? trim.replace(/^"|"$/g, "") : null;
+    let finalImage = photo
       ? `${SOURCE}/vehicles/${photo[1]}/01.jpg`
       : photoList
         ? new URL(photoList[1] ?? "", SOURCE).toString()
         : null;
+
+    if (!finalImage || /bennington/i.test(title) || /pontoon/i.test(subtitle ?? "")) {
+      if (/bennington/i.test(title) || /pontoon/i.test(subtitle ?? "")) {
+        finalImage = "/vehicles/bennington-2022-boat.jpg";
+      }
+    }
+
     items.push({
       id,
       category: categoryMap[cat],
-      title: [year, make, model].filter(Boolean).join(" ") || id,
-      subtitle: trim ? trim.replace(/^"|"$/g, "") : null,
+      title,
+      subtitle,
       financing: deal ? deal.replace(/-/g, " ") : null,
       entryFee: num(chunk, "entryFee"),
       monthlyPayment: num(chunk, "monthlyPayment"),
       monthsLeft: num(chunk, "monthsLeft"),
       interestRate: num(chunk, "interestRate"),
       location: [city, state].filter(Boolean).join(", ") || null,
-      image,
+      image: finalImage,
     });
   }
   return items;

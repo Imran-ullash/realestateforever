@@ -555,9 +555,9 @@ function Homepage() {
         <div className="mb-8 flex flex-col gap-5 sm:mb-10 sm:gap-8 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <div className="mb-3 flex items-center gap-3 sm:mb-4">
-              <span className="size-2 rounded-full bg-primary animate-pulse shadow-[0_0_8px_rgba(190,149,67,0.7)]" />
+              <span className="size-2 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_8px_rgba(16,185,129,0.75)]" />
               <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-primary sm:text-[12px] sm:tracking-[0.32em]">
-                Active Marketplace · Subject To Change Hourly
+                Subject To Change Hourly
               </p>
             </div>
             <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">

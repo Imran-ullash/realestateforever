@@ -718,6 +718,56 @@ input:-webkit-autofill:active {
   animation: gold-beam-spin 2.8s linear infinite;
 }
 
+/* 4-Sided Traveling Gold Border Beam for Welcome Access Frame (Continuous Orbiting Beam) */
+.welcome-gold-pulse-line {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  pointer-events: none;
+  z-index: 25;
+  overflow: hidden;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.85));
+}
+
+.welcome-gold-pulse-line::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 280%;
+  height: 280%;
+  transform: translate(-50%, -50%);
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    transparent 240deg,
+    rgba(212, 175, 55, 0.4) 280deg,
+    #ffd700 325deg,
+    #ffffff 352deg,
+    #ffd700 358deg,
+    transparent 360deg
+  );
+  animation: gold-beam-spin 3.2s linear infinite;
+}
+
+.welcome-gold-box-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border: 1px solid rgba(212, 175, 55, 0.65);
+  box-shadow: 
+    0 0 16px rgba(212, 175, 55, 0.3),
+    inset 0 0 12px rgba(212, 175, 55, 0.12);
+  pointer-events: none;
+  z-index: 24;
+  animation: gold-box-pulse 2s ease-in-out infinite alternate;
+}
+
 /* Content Protection & Anti-Copy System */
 body {
   -webkit-user-select: none;

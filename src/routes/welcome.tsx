@@ -307,26 +307,30 @@ function Welcome() {
           </h1>
 
           <div
-            className={`access-gold-frame mt-2 w-full transition-all duration-300 ${
+            className={`access-gold-frame relative overflow-hidden mt-2 w-full transition-all duration-300 ${
               activeTab === "leadership" ? "max-w-[560px]" : "max-w-[440px]"
-            } rounded-lg border-2 border-primary bg-background/80 p-5 sm:p-7 backdrop-blur-md sm:mt-6`}
+            } rounded-lg border border-primary/50 bg-background/85 p-5 sm:p-7 backdrop-blur-md sm:mt-6`}
           >
-            {/* Top Luxury Switcher Tabs */}
-            <div className="mx-auto mb-5 flex w-full max-w-[380px] items-center rounded-full border border-primary/35 bg-black/80 p-1 shadow-inner backdrop-blur-md">
+            {/* 4-Sided Animated Traveling Gold Border Beam (from homepage) */}
+            <span className="welcome-gold-box-border" aria-hidden="true" />
+            <span className="welcome-gold-pulse-line" aria-hidden="true" />
+
+            {/* Top Luxury Switcher Tabs - Single line guaranteed */}
+            <div className="relative z-30 mx-auto mb-5 flex w-full max-w-[440px] items-center rounded-full border border-primary/35 bg-black/80 p-1 shadow-inner backdrop-blur-md">
               <button
                 type="button"
                 onClick={() => {
                   setActiveTab("password");
                   setLeadershipSent(null);
                 }}
-                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 px-3 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 ${
+                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 px-2.5 sm:px-3 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.11em] sm:tracking-[0.14em] whitespace-nowrap transition-all duration-300 ${
                   activeTab === "password"
                     ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.55)]"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                <LockKeyhole className="size-3 sm:size-3.5" />
-                <span>Private Access</span>
+                <LockKeyhole className="size-3 sm:size-3.5 shrink-0" />
+                <span className="whitespace-nowrap">Private Access</span>
               </button>
               <button
                 type="button"
@@ -334,20 +338,20 @@ function Welcome() {
                   setActiveTab("leadership");
                   setError(false);
                 }}
-                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 px-3 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.18em] transition-all duration-300 ${
+                className={`relative flex flex-1 items-center justify-center gap-1.5 rounded-full py-2 px-2.5 sm:px-3 text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.11em] sm:tracking-[0.14em] whitespace-nowrap transition-all duration-300 ${
                   activeTab === "leadership"
                     ? "bg-primary text-primary-foreground shadow-[0_0_16px_rgba(190,149,67,0.55)]"
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                <Mail className="size-3 sm:size-3.5" />
-                <span>Message Leadership</span>
+                <Mail className="size-3 sm:size-3.5 shrink-0" />
+                <span className="whitespace-nowrap">Message Leadership</span>
               </button>
             </div>
 
             {/* TAB 1: ENTER PASSWORD */}
             {activeTab === "password" && (
-              <div>
+              <div className="relative z-30">
                 <div className="mx-auto mb-3 sm:mb-4 flex size-9 sm:size-10 items-center justify-center rounded-full border border-primary/45 bg-background/40 text-primary">
                   <LockKeyhole className="size-3.5 sm:size-4" />
                 </div>
@@ -421,7 +425,7 @@ function Welcome() {
 
             {/* TAB 2: MESSAGE LEADERSHIP FORM */}
             {activeTab === "leadership" && (
-              <div>
+              <div className="relative z-30">
                 <div className="mx-auto mb-2 flex size-9 sm:size-10 items-center justify-center rounded-full border border-primary/45 bg-background/40 text-primary">
                   <Mail className="size-3.5 sm:size-4" />
                 </div>

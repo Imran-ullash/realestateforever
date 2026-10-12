@@ -11,7 +11,7 @@ const marketClocks = [
   { city: "Florida", zone: "America/New_York" },
   { city: "Texas", zone: "America/Chicago" },
   { city: "New York", zone: "America/New_York" },
-  { city: "Washington DC", shortName: "Wash DC", zone: "America/New_York" },
+  { city: "Washington DC", zone: "America/New_York" },
 ];
 
 function getClockParts(date: Date, timeZone: string) {
@@ -65,12 +65,12 @@ function MarketClocks() {
   }, []);
 
   return (
-    <div aria-label="Current market times" className="hidden items-center justify-between gap-1 lg:gap-1.5 xl:gap-2 2xl:gap-3.5 lg:flex">
+    <div aria-label="Current market times" className="hidden items-center justify-between gap-1.5 lg:gap-2 xl:gap-2.5 2xl:gap-4 lg:flex">
       {marketClocks.map((market) => {
         const clock = now ? getClockParts(now, market.zone) : null;
         return (
-          <div key={market.city} className="flex flex-col items-center w-[50px] lg:w-[54px] xl:w-[62px] 2xl:w-[82px]">
-            <div className="relative size-[38px] lg:size-[42px] xl:size-[48px] 2xl:size-[62px]">
+          <div key={market.city} className="flex flex-col items-center w-[58px] lg:w-[64px] xl:w-[76px] 2xl:w-[94px]">
+            <div className="relative size-[46px] lg:size-[52px] xl:size-[64px] 2xl:size-[74px]">
               <svg
                 viewBox="0 0 72 72"
                 aria-hidden="true"
@@ -143,20 +143,13 @@ function MarketClocks() {
                 <circle cx="36" cy="36" r="1.8" fill="currentColor" className="text-primary" />
               </svg>
             </div>
-            <span className="mt-1 whitespace-nowrap font-display text-[8.5px] lg:text-[9px] xl:text-[10px] 2xl:text-[12px] font-semibold uppercase tracking-[0.03em] leading-none text-primary drop-shadow-[0_1px_2px_rgba(190,149,67,0.3)]">
-              {market.shortName ? (
-                <>
-                  <span className="2xl:hidden">{market.shortName}</span>
-                  <span className="hidden 2xl:inline">{market.city}</span>
-                </>
-              ) : (
-                market.city
-              )}
+            <span className="mt-1 whitespace-nowrap font-display text-[9px] lg:text-[9.5px] xl:text-[11px] 2xl:text-[12.5px] font-semibold uppercase tracking-[0.04em] leading-none text-primary drop-shadow-[0_1px_2px_rgba(190,149,67,0.3)]">
+              {market.city}
             </span>
             <time
               dateTime={now?.toISOString()}
               aria-label={clock ? `${clock.digital} in ${market.city}` : market.city}
-              className="mt-1 whitespace-nowrap font-sans text-[7.5px] lg:text-[8px] xl:text-[9px] 2xl:text-[11px] font-medium tracking-normal leading-none text-foreground/80"
+              className="mt-1 whitespace-nowrap font-sans text-[8px] lg:text-[8.5px] xl:text-[10px] 2xl:text-[11.5px] font-medium tracking-normal leading-none text-foreground/85"
             >
               {clock ? `${clock.short} ${clock.period}` : "--:--"}
             </time>
@@ -241,9 +234,11 @@ export function SiteHeader({ home = "" }: { home?: string }) {
             </a>
           )}
         </nav>
-        <div className="flex shrink-0 items-center justify-end gap-1.5 lg:gap-2 xl:gap-2.5 2xl:gap-4">
+        <div className="flex shrink-0 items-center justify-end gap-1.5 lg:gap-2 xl:gap-3 2xl:gap-5">
           <MarketClocks />
-          <TalkLiveButton className="hidden lg:flex" />
+          <div className="hidden lg:flex items-center pl-2 xl:pl-3 2xl:pl-4 border-l border-primary/25 ml-1 xl:ml-2">
+            <TalkLiveButton />
+          </div>
           <Button
             type="button"
             variant="ghost"

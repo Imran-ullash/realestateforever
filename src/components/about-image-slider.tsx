@@ -7,6 +7,11 @@ import aboutOfficeSlide4 from "@/assets/about-office-slide-4.jpg";
 
 const SLIDES = [
   {
+    src: aboutOfficeSlide4,
+    alt: "RealEstateForever.com twilight oceanfront advisory suite",
+    title: "Twilight Advisory Suite",
+  },
+  {
     src: aboutOfficeSlide1,
     alt: "RealEstateForever.com luxury executive reception and ocean view",
     title: "Executive Reception",
@@ -20,11 +25,6 @@ const SLIDES = [
     src: aboutOfficeSlide3,
     alt: "RealEstateForever.com panoramic coastal lobby",
     title: "Panoramic Coastal Lobby",
-  },
-  {
-    src: aboutOfficeSlide4,
-    alt: "RealEstateForever.com twilight oceanfront advisory suite",
-    title: "Twilight Advisory Suite",
   },
 ];
 
@@ -46,12 +46,12 @@ export function AboutImageSlider() {
     setCurrentIndex(index);
   };
 
-  // Autoplay
+  // Autoplay (faster cycle per client feedback)
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
       nextSlide();
-    }, 4500);
+    }, 2800);
     return () => clearInterval(interval);
   }, [isPaused, nextSlide]);
 

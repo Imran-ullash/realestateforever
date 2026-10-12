@@ -336,14 +336,13 @@ function Homepage() {
       >
         <video
           poster={homeMainPoster.url}
-          controls
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
           aria-label="Real Estate Forever main film"
-          className="size-full w-full object-cover object-center"
+          className="size-full w-full object-cover object-center pointer-events-none select-none"
         >
           <source src={homeMainWebm.url} type="video/webm" />
           <source src={homeMainVideo.url} type="video/mp4" />
@@ -370,7 +369,7 @@ function Homepage() {
                 <h2 className="text-balance font-display text-4xl sm:text-5xl md:text-6xl font-normal tracking-tight text-foreground">
                   About Us
                 </h2>
-                <p className="mt-2 text-base sm:text-lg font-light italic font-display text-muted-foreground/90 max-w-2xl">
+                <p className="mt-2.5 text-base sm:text-lg md:text-xl font-normal tracking-wide text-foreground/95 max-w-2xl">
                   Real Estate Investments & Development
                 </p>
               </div>
@@ -407,16 +406,15 @@ function Homepage() {
                     </span>
                   </div>
                   <h3 className="font-display text-3xl sm:text-4xl lg:text-[42px] font-normal text-foreground tracking-[-0.01em] leading-[1.14]">
-                    Real Estate Investments & <span className="text-primary italic font-light">Development</span>
+                    Real Estate <span className="text-primary">Investments</span> & <span className="text-primary italic font-light">Development</span>
                   </h3>
                   <p className="mt-5 text-[15px] sm:text-base lg:text-[17px] leading-relaxed text-muted-foreground/90 font-light sm:mt-6">
                     Strategic & carefully chosen leadership focused on uncovering exceptional opportunities, engineering lasting asset value, and cultivating meaningful relationships.
                   </p>
                 </div>
 
-                <div className="relative z-10 mt-8 pt-5 border-t border-primary/20 flex items-center justify-between text-[11px] sm:text-[12px] uppercase tracking-[0.2em] text-muted-foreground/75 sm:mt-10">
+                <div className="relative z-10 mt-8 pt-5 border-t border-primary/20 flex items-center text-[11px] sm:text-[12px] uppercase tracking-[0.2em] text-muted-foreground/75 sm:mt-10">
                   <span className="text-primary font-semibold">Leadership Focus</span>
-                  <span>Direct Advisory</span>
                 </div>
               </div>
             </div>
@@ -563,16 +561,13 @@ function Homepage() {
               </p>
             </div>
             <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">
-              Curated Opportunities <span className="text-primary uppercase tracking-tight">Inventory</span>
+              <span className="text-primary uppercase tracking-tight">Inventory</span>
             </h2>
           </div>
 
-          <div className="max-w-lg space-y-1.5">
+          <div className="max-w-lg">
             <p className="text-[13px] sm:text-[14px] font-semibold text-primary tracking-wide">
               Inventory is not guaranteed and is subject to hourly changes
-            </p>
-            <p className="text-pretty text-[14px] leading-6 text-muted-foreground/90 sm:text-[15px]">
-              Explore verified opportunities by market and review the core figures before requesting the complete details.
             </p>
           </div>
         </div>

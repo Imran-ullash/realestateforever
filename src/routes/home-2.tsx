@@ -238,14 +238,13 @@ function Homepage() {
       >
         <video
           poster={homeMainPoster.url}
-          controls
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
           aria-label="Real Estate Forever main film"
-          className="size-full w-full object-cover object-center"
+          className="size-full w-full object-cover object-center pointer-events-none select-none"
         >
           <source src={homeMainWebm.url} type="video/webm" />
           <source src={homeMainVideo.url} type="video/mp4" />
@@ -452,13 +451,9 @@ function Homepage() {
               </p>
             </div>
             <h2 className="text-balance font-display text-[2.2rem] font-medium tracking-tight sm:text-5xl sm:leading-none md:text-6xl text-foreground">
-              Curated opportunities
+              <span className="text-primary uppercase tracking-tight">Inventory</span>
             </h2>
           </div>
-
-          <p className="max-w-lg text-pretty text-[15px] leading-7 text-muted-foreground/90 sm:text-base">
-            Explore verified opportunities by market and review the core figures before requesting the complete details.
-          </p>
         </div>
 
         <div className="mb-8 rounded-lg luxury-glass-panel p-3.5 sm:mb-12 sm:p-4.5 md:p-5">

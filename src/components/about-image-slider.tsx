@@ -8,9 +8,9 @@ import aboutOfficeSlide5 from "@/assets/about-office-slide-5.jpg";
 
 const SLIDES = [
   {
-    src: aboutOfficeSlide4,
-    alt: "RealEstateForever.com twilight oceanfront advisory suite",
-    title: "Twilight Advisory Suite",
+    src: aboutOfficeSlide1,
+    alt: "RealEstateForever.com luxury executive reception and ocean view",
+    title: "Executive Reception",
   },
   {
     src: aboutOfficeSlide5,
@@ -18,9 +18,9 @@ const SLIDES = [
     title: "Sunset Grand Reception",
   },
   {
-    src: aboutOfficeSlide1,
-    alt: "RealEstateForever.com luxury executive reception and ocean view",
-    title: "Executive Reception",
+    src: aboutOfficeSlide4,
+    alt: "RealEstateForever.com twilight oceanfront advisory suite",
+    title: "Twilight Advisory Suite",
   },
   {
     src: aboutOfficeSlide2,
@@ -52,14 +52,14 @@ export function AboutImageSlider() {
     setCurrentIndex(index);
   };
 
-  // Autoplay (faster cycle per client feedback)
+  // Autoplay (fast 2.0s cycle per client request, resets on slide transition)
   useEffect(() => {
     if (isPaused) return;
     const interval = setInterval(() => {
       nextSlide();
-    }, 2800);
+    }, 2000);
     return () => clearInterval(interval);
-  }, [isPaused, nextSlide]);
+  }, [currentIndex, isPaused, nextSlide]);
 
   // Touch swipe handling
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -104,8 +104,6 @@ export function AboutImageSlider() {
       aria-label="About Us gallery slider"
       tabIndex={0}
       onKeyDown={handleKeyDown}
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
@@ -119,7 +117,7 @@ export function AboutImageSlider() {
             <div
               key={index}
               aria-hidden={!isActive}
-              className={`absolute inset-0 size-full transition-all duration-700 ease-in-out ${
+              className={`absolute inset-0 size-full transition-all duration-500 ease-in-out ${
                 isActive
                   ? "opacity-100 scale-100 z-10 pointer-events-auto"
                   : "opacity-0 scale-105 z-0 pointer-events-none"
@@ -128,8 +126,8 @@ export function AboutImageSlider() {
               <img
                 src={slide.src}
                 alt={slide.alt}
-                loading={index === 0 ? "eager" : "lazy"}
-                className="size-full object-cover object-center transition-transform duration-700 group-hover:scale-[1.02]"
+                loading={index < 2 ? "eager" : "lazy"}
+                className="size-full object-cover object-center transition-transform duration-500 group-hover:scale-[1.02]"
               />
               <div
                 aria-hidden="true"
@@ -150,6 +148,8 @@ export function AboutImageSlider() {
       {/* Previous button */}
       <button
         type="button"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
         onClick={(e) => {
           e.stopPropagation();
           prevSlide();
@@ -163,6 +163,8 @@ export function AboutImageSlider() {
       {/* Next button */}
       <button
         type="button"
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
         onClick={(e) => {
           e.stopPropagation();
           nextSlide();
@@ -174,7 +176,11 @@ export function AboutImageSlider() {
       </button>
 
       {/* Pagination indicators */}
-      <div className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 rounded-full bg-black/60 px-3 py-1.5 backdrop-blur-md border border-white/10 shadow-lg">
+      <div
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+        className="absolute bottom-3 sm:bottom-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 sm:gap-2 rounded-full bg-black/60 px-3 py-1.5 backdrop-blur-md border border-white/10 shadow-lg"
+      >
         {SLIDES.map((_, index) => {
           const isActive = index === currentIndex;
           return (

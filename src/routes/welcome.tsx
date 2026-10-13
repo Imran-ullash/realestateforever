@@ -19,14 +19,16 @@ export const Route = createFileRoute("/welcome")({
     const ogImage = `https://realestateforever.com${ogImageAsset.url}`;
     return {
       meta: [
-        { title: "RealEstateForever.com - Private access" },
-        { name: "description", content: "Access only to exclusive private real estate investors." },
-        { property: "og:title", content: "Access Only To Exclusive Private Real Estate Investors" },
-        { property: "og:description", content: "Private access to Real Estate Forever." },
+        { title: "Real Estate Investments & Development | RealEstateForever.com" },
+        { name: "description", content: "RealEstateForever.com" },
+        { property: "og:site_name", content: "RealEstateForever.com" },
+        { property: "og:title", content: "Real Estate Investments & Development" },
+        { property: "og:description", content: "RealEstateForever.com" },
         { property: "og:image", content: ogImage },
         { property: "og:type", content: "website" },
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:title", content: "Access Only To Exclusive Private Real Estate Investors" },
+        { name: "twitter:title", content: "Real Estate Investments & Development" },
+        { name: "twitter:description", content: "RealEstateForever.com" },
         { name: "twitter:image", content: ogImage },
       ],
     };

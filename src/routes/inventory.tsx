@@ -29,12 +29,15 @@ export const Route = createFileRoute("/inventory")({
   },
   head: () => ({
     meta: [
-      { title: "RealEstateForever.com | Real Estate Investments." },
-      { name: "description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
-      { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
-      { property: "og:description", content: "Explore Real Estate Forever's curated real estate inventory across the United States with an interactive map." },
+      { title: "Real Estate Investments & Development | RealEstateForever.com" },
+      { name: "description", content: "RealEstateForever.com" },
+      { property: "og:site_name", content: "RealEstateForever.com" },
+      { property: "og:title", content: "Real Estate Investments & Development" },
+      { property: "og:description", content: "RealEstateForever.com" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Real Estate Investments & Development" },
+      { name: "twitter:description", content: "RealEstateForever.com" },
     ]
   }),
   component: InventoryPage,

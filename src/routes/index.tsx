@@ -179,15 +179,18 @@ export const Route = createFileRoute("/")({
   },
   head: () => ({
     meta: [
-      { title: "RealEstateForever.com | Real Estate Investments." },
+      { title: "Real Estate Investments & Development | RealEstateForever.com" },
       {
         name: "description",
-        content: "The #1 marketplace for off-market real estate investors. AI-matched deals delivered daily.",
+        content: "RealEstateForever.com",
       },
-      { property: "og:title", content: "RealEstateForever.com | Real Estate Investments." },
-      { property: "og:description", content: "Exclusive access to off-market real estate investment properties." },
+      { property: "og:site_name", content: "RealEstateForever.com" },
+      { property: "og:title", content: "Real Estate Investments & Development" },
+      { property: "og:description", content: "RealEstateForever.com" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Real Estate Investments & Development" },
+      { name: "twitter:description", content: "RealEstateForever.com" },
     ],
   }),
   component: Homepage,

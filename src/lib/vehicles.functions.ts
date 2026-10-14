@@ -96,8 +96,27 @@ function parseBundle(js: string): Vehicle[] {
   return items;
 }
 
+const CUSTOM_VEHICLES: Vehicle[] = [
+  {
+    id: "chevy-suburban-2022",
+    category: "cars",
+    title: "2022 Chevrolet Suburban",
+    subtitle: "LT Sport Utility 4D",
+    financing: "Subject To",
+    entryFee: null,
+    monthlyPayment: null,
+    monthsLeft: null,
+    interestRate: null,
+    location: "Dallas, TX",
+    image: "/vehicles/chevy-suburban-2022-01.png",
+  },
+];
+
 export const getVehicleInventory = createServerFn({ method: "GET" }).handler(async () => {
-  if (cache && Date.now() - cache.at < CACHE_MS) return { ok: true as const, items: cache.items };
+  if (cache && Date.now() - cache.at < CACHE_MS) {
+    const combined = [...CUSTOM_VEHICLES, ...cache.items.filter((i) => i.id !== "chevy-suburban-2022")];
+    return { ok: true as const, items: combined };
+  }
   try {
     const html = await (await fetch(SOURCE)).text();
     const scripts = Array.from(html.matchAll(/src="(\/assets\/[^"]+\.js)"/g)).map((m) => m[1]);
@@ -108,9 +127,11 @@ export const getVehicleInventory = createServerFn({ method: "GET" }).handler(asy
       if (items.length) break;
     }
     if (items.length) cache = { at: Date.now(), items };
-    return { ok: true as const, items: items.length ? items : (cache?.items ?? []) };
+    const allItems = [...CUSTOM_VEHICLES, ...(items.length ? items.filter((i) => i.id !== "chevy-suburban-2022") : (cache?.items ?? []))];
+    return { ok: true as const, items: allItems };
   } catch (err) {
     console.error("[vehicles] source fetch failed", err);
-    return { ok: false as const, items: cache?.items ?? [] };
+    const fallback = [...CUSTOM_VEHICLES, ...(cache?.items.filter((i) => i.id !== "chevy-suburban-2022") ?? [])];
+    return { ok: false as const, items: fallback };
   }
 });

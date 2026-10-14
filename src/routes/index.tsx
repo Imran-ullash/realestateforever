@@ -748,6 +748,8 @@ function Homepage() {
                       onError={(e) => {
                         if (/bennington/i.test(v.title) || v.category === "boats") {
                           e.currentTarget.src = "/vehicles/bennington-2022-boat.jpg";
+                        } else if (/suburban|chevrolet/i.test(v.title)) {
+                          e.currentTarget.src = "/vehicles/chevy-suburban-2022-01.png";
                         }
                       }}
                       className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"

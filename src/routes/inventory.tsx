@@ -55,6 +55,7 @@ function InventoryPage() {
   const [galleryListing, setGalleryListing] = useState<Listing | null>(null);
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [cardMediaIndexes, setCardMediaIndexes] = useState<Record<number, number>>({});
+  const [vehicleMediaIndexes, setVehicleMediaIndexes] = useState<Record<string, number>>({});
   const cardRefs = useRef(new Map<string, HTMLElement>());
 
   const getListingMediaList = (listing: Listing) => {
@@ -85,6 +86,57 @@ function InventoryPage() {
       ...prev,
       [listing.id]: ((prev[listing.id] ?? 0) - 1 + count) % count,
     }));
+  };
+
+  const getVehicleMediaList = (vehicle: Vehicle) => {
+    const imgs =
+      vehicle.images && vehicle.images.length > 0
+        ? vehicle.images
+        : vehicle.image
+          ? [vehicle.image]
+          : /bennington/i.test(vehicle.title)
+            ? ["/vehicles/bennington-2022-boat.jpg"]
+            : /suburban|chevrolet/i.test(vehicle.title)
+              ? ["/vehicles/chevy-suburban-2022-01.png"]
+              : [];
+    return imgs.map((url, i) => ({ type: "image" as const, url, label: `Photo ${i + 1}` }));
+  };
+
+  const nextVehicleMedia = (e: React.MouseEvent, vehicle: Vehicle) => {
+    e.stopPropagation();
+    const count = getVehicleMediaList(vehicle).length;
+    if (count <= 1) return;
+    setVehicleMediaIndexes((prev) => ({
+      ...prev,
+      [vehicle.id]: ((prev[vehicle.id] ?? 0) + 1) % count,
+    }));
+  };
+
+  const prevVehicleMedia = (e: React.MouseEvent, vehicle: Vehicle) => {
+    e.stopPropagation();
+    const count = getVehicleMediaList(vehicle).length;
+    if (count <= 1) return;
+    setVehicleMediaIndexes((prev) => ({
+      ...prev,
+      [vehicle.id]: ((prev[vehicle.id] ?? 0) - 1 + count) % count,
+    }));
+  };
+
+  const openVehicleGallery = (vehicle: Vehicle, index = 0) => {
+    const media = getVehicleMediaList(vehicle);
+    const imgs = media.map((m) => m.url);
+    const virtualListing: Listing = {
+      id: -1,
+      image: imgs[0] || "",
+      images: imgs,
+      city: vehicle.title,
+      state: vehicle.subtitle || "",
+      zip: vehicle.location || "",
+      beds: "",
+      baths: "",
+      area: "",
+    };
+    setGalleryListing(virtualListing);
   };
 
   useEffect(() => {
@@ -270,14 +322,102 @@ function InventoryPage() {
                   <div className="p-4"><div className="flex items-start justify-between gap-2"><h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">{item.listing.city}, {item.listing.state}</h3></div><p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85"><MapPin className="size-3 text-primary" /> {item.listing.state} {item.listing.zip}</p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85"><span className="flex items-center gap-1"><BedDouble className="size-3.5 text-primary" />{item.listing.beds} beds</span><span className="flex items-center gap-1"><Bath className="size-3.5 text-primary" />{item.listing.baths} baths</span><span className="flex items-center gap-1"><Ruler className="size-3.5 text-primary" />{item.listing.area} sq ft</span></div></div>
                 </article>
               );
-            })() : (
-              <article key={item.key} ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }} className={`group relative min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`} role="button" tabIndex={0} aria-label={`Select ${item.vehicle.title}`} aria-pressed={selectedKey === item.key} onClick={() => setSelectedKey(item.key)} onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}>
-                <span className="gold-box-border" aria-hidden="true" />
-                <span className="gold-pulse-line" aria-hidden="true" />
-                <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-muted">{item.vehicle.image ? <img src={item.vehicle.image} alt={item.vehicle.title} loading="lazy" className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]" /> : <div className="flex size-full items-center justify-center"><Car className="size-10 text-primary" /></div>}<span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">{item.vehicle.category}</span></div>
-                <div className="p-4"><div className="flex items-start justify-between gap-2"><h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">{item.vehicle.title}</h3></div><p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85"><MapPin className="size-3 text-primary" /> {item.vehicle.location ?? "Location on request"}</p><div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85">{item.vehicle.subtitle && <span className="flex items-center gap-1"><Car className="size-3.5 text-primary" />{item.vehicle.subtitle}</span>}{item.vehicle.financing && <span className="uppercase">{item.vehicle.financing}</span>}</div></div>
-              </article>
-            ))}
+            })() : (() => {
+              const mediaList = getVehicleMediaList(item.vehicle);
+              const hasMultipleMedia = mediaList.length > 1;
+              const currentIndex = (vehicleMediaIndexes[item.vehicle.id] ?? 0) % (mediaList.length || 1);
+              const currentMedia = mediaList[currentIndex] ?? mediaList[0];
+              const totalPhotos = mediaList.length;
+
+              return (
+                <article
+                  key={item.key}
+                  ref={(el) => { if (el) cardRefs.current.set(item.key, el); else cardRefs.current.delete(item.key); }}
+                  className={`group relative min-w-0 cursor-pointer rounded-md overflow-hidden transition-all duration-300 ${selectedKey === item.key ? "border border-primary bg-primary/15 shadow-[0_0_24px_rgba(190,149,67,0.35)]" : "luxury-card-depth"}`}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Select ${item.vehicle.title}`}
+                  aria-pressed={selectedKey === item.key}
+                  onClick={() => setSelectedKey(item.key)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedKey(item.key); } }}
+                >
+                  <span className="gold-box-border" aria-hidden="true" />
+                  <span className="gold-pulse-line" aria-hidden="true" />
+                  <div className="relative aspect-[16/9] luxury-image-frame overflow-hidden bg-muted group/img">
+                    {currentMedia?.url ? (
+                      <img
+                        src={currentMedia.url}
+                        alt={item.vehicle.title}
+                        loading="lazy"
+                        onError={(e) => {
+                          if (/bennington/i.test(item.vehicle.title) || item.vehicle.category === "boats") {
+                            e.currentTarget.src = "/vehicles/bennington-2022-boat.jpg";
+                          } else if (/suburban|chevrolet/i.test(item.vehicle.title)) {
+                            e.currentTarget.src = "/vehicles/chevy-suburban-2022-01.png";
+                          }
+                        }}
+                        className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      />
+                    ) : (
+                      <div className="flex size-full items-center justify-center">
+                        <Car className="size-10 text-primary" />
+                      </div>
+                    )}
+                    <span className="absolute left-3 top-3 border border-primary/50 bg-background/90 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-primary">
+                      {item.vehicle.category}
+                    </span>
+
+                    {hasMultipleMedia && (
+                      <>
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); openVehicleGallery(item.vehicle, currentIndex); }}
+                          className="absolute bottom-3 left-3 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[10px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md hover:bg-primary hover:text-primary-foreground transition-all"
+                        >
+                          <Images className="size-3 text-primary" />
+                          <span>Photo {currentIndex + 1} of {totalPhotos}</span>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => prevVehicleMedia(e, item.vehicle)}
+                          aria-label="Previous item"
+                          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronLeft className="size-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={(e) => nextVehicleMedia(e, item.vehicle)}
+                          aria-label="Next item"
+                          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-7 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                        >
+                          <ChevronRight className="size-3.5" />
+                        </button>
+                      </>
+                    )}
+                  </div>
+                  <div className="p-4">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="min-w-0 font-display text-[21px] font-normal leading-tight tracking-[-0.01em] transition-colors group-hover:text-primary">
+                        {item.vehicle.title}
+                      </h3>
+                    </div>
+                    <p className="mt-1 flex items-center gap-1 text-[12px] text-muted-foreground/85">
+                      <MapPin className="size-3 text-primary" /> {item.vehicle.location ?? "Location on request"}
+                    </p>
+                    <div className="mt-4 flex flex-wrap gap-x-4 gap-y-2 border-t border-primary/15 pt-3 text-[12px] text-foreground/85">
+                      {item.vehicle.subtitle && (
+                        <span className="flex items-center gap-1">
+                          <Car className="size-3.5 text-primary" />
+                          {item.vehicle.subtitle}
+                        </span>
+                      )}
+                      {item.vehicle.financing && <span className="uppercase">{item.vehicle.financing}</span>}
+                    </div>
+                  </div>
+                </article>
+              );
+            })())}
           </div>
         </div>
       </div>

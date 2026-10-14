@@ -14,6 +14,7 @@ export type Vehicle = {
   interestRate: number | null;
   location: string | null;
   image: string | null;
+  images?: string[];
 };
 
 const SOURCE = "https://subtocarguy.com";
@@ -109,6 +110,12 @@ const CUSTOM_VEHICLES: Vehicle[] = [
     interestRate: null,
     location: "Dallas, TX",
     image: "/vehicles/chevy-suburban-2022-01.png",
+    images: [
+      "/vehicles/chevy-suburban-2022-01.png",
+      "/vehicles/chevy-suburban-2022-03.png",
+      "/vehicles/chevy-suburban-2022-02.png",
+      "/vehicles/chevy-suburban-2022-04.png",
+    ],
   },
 ];
 

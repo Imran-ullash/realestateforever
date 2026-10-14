@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
-import { MapPin } from "lucide-react";
+import { ChevronLeft, ChevronRight, Images, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getVehicleInventory, type Vehicle, type VehicleCategory } from "@/lib/vehicles.functions";
+import { PropertyGalleryModal } from "@/components/property-gallery-modal";
+import type { Listing } from "@/data/listings";
 
 const tabs: { key: "all" | VehicleCategory; label: string }[] = [
   { key: "all", label: "All" },
@@ -20,6 +22,9 @@ const SHOW_LOCATION = false;
 export function VehicleInventory() {
   const [items, setItems] = useState<Vehicle[] | null>(null);
   const [tab, setTab] = useState<"all" | VehicleCategory>("all");
+  const [galleryListing, setGalleryListing] = useState<Listing | null>(null);
+  const [galleryInitialIndex, setGalleryInitialIndex] = useState(0);
+  const [vehiclePhotoIndexes, setVehiclePhotoIndexes] = useState<Record<string, number>>({});
 
   useEffect(() => {
     getVehicleInventory()
@@ -29,6 +34,58 @@ export function VehicleInventory() {
 
   const filtered = useMemo(() => (items ?? []).filter((v) => tab === "all" || v.category === tab), [items, tab]);
   const shown = filtered;
+
+  const getVehicleMediaList = (v: Vehicle) => {
+    const imgs =
+      v.images && v.images.length > 0
+        ? v.images
+        : v.image
+          ? [v.image]
+          : /bennington/i.test(v.title)
+            ? ["/vehicles/bennington-2022-boat.jpg"]
+            : /suburban|chevrolet/i.test(v.title)
+              ? ["/vehicles/chevy-suburban-2022-01.png"]
+              : [];
+    return imgs.map((url, i) => ({ type: "image" as const, url, label: `Photo ${i + 1}` }));
+  };
+
+  const nextVehicleMedia = (e: React.MouseEvent, v: Vehicle) => {
+    e.stopPropagation();
+    const count = getVehicleMediaList(v).length;
+    if (count <= 1) return;
+    setVehiclePhotoIndexes((prev) => ({
+      ...prev,
+      [v.id]: ((prev[v.id] ?? 0) + 1) % count,
+    }));
+  };
+
+  const prevVehicleMedia = (e: React.MouseEvent, v: Vehicle) => {
+    e.stopPropagation();
+    const count = getVehicleMediaList(v).length;
+    if (count <= 1) return;
+    setVehiclePhotoIndexes((prev) => ({
+      ...prev,
+      [v.id]: ((prev[v.id] ?? 0) - 1 + count) % count,
+    }));
+  };
+
+  const openVehicleGallery = (v: Vehicle, index = 0) => {
+    const media = getVehicleMediaList(v);
+    const imgs = media.map((m) => m.url);
+    const fakeListing: Listing = {
+      id: -1,
+      image: imgs[0] || "",
+      images: imgs,
+      city: v.title,
+      state: v.subtitle || "",
+      zip: v.location || "",
+      beds: "",
+      baths: "",
+      area: "",
+    };
+    setGalleryListing(fakeListing);
+    setGalleryInitialIndex(index);
+  };
 
   return (
     <section
@@ -64,58 +121,100 @@ export function VehicleInventory() {
           Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="aspect-[4/5] animate-pulse rounded-md border border-primary/15 bg-card/40" />
           ))}
-        {shown.map((v) => (
-          <article
-            key={v.id}
-            className="reveal-up group relative min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden"
-          >
-            <span className="gold-box-border" aria-hidden="true" />
-            <span className="gold-pulse-line" aria-hidden="true" />
-            <div className="relative aspect-[16/10] luxury-image-frame overflow-hidden bg-muted">
-              {v.image || /bennington/i.test(v.title) ? (
-                <img
-                  src={v.image || "/vehicles/bennington-2022-boat.jpg"}
-                  alt={v.title}
-                  loading="lazy"
-                  onError={(e) => {
-                    if (/bennington/i.test(v.title) || v.category === "boats") {
-                      e.currentTarget.src = "/vehicles/bennington-2022-boat.jpg";
-                    } else if (/suburban|chevrolet/i.test(v.title)) {
-                      e.currentTarget.src = "/vehicles/chevy-suburban-2022-01.png";
-                    }
-                  }}
-                  className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
-                />
-              ) : null}
-            </div>
+        {shown.map((v) => {
+          const mediaList = getVehicleMediaList(v);
+          const hasMultipleMedia = mediaList.length > 1;
+          const currentIndex = (vehiclePhotoIndexes[v.id] ?? 0) % (mediaList.length || 1);
+          const currentMedia = mediaList[currentIndex] ?? mediaList[0];
+          const totalPhotos = mediaList.length;
 
-            <div className="flex flex-1 flex-col p-5 sm:p-6">
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div className="min-w-0 flex-1 basis-28">
-                  <h3 className="font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
-                    {v.title}
-                  </h3>
-                  {v.subtitle && <p className="mt-1 truncate text-[13px] text-muted-foreground/80">{v.subtitle}</p>}
-                </div>
-                {SHOW_ENTRY_FEE && (
-                  <div className="shrink-0 text-right">
-                    <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/85 sm:text-[11px]">
-                      Entry
-                    </p>
-                    <p className="font-display text-xl font-medium text-primary sm:text-2xl drop-shadow-[0_1px_8px_rgba(190,149,67,0.3)]">{money(v.entryFee)}</p>
-                  </div>
+          return (
+            <article
+              key={v.id}
+              className="reveal-up group relative min-w-0 flex flex-col rounded-md luxury-card-depth overflow-hidden transition-all duration-300 hover:border-transparent"
+            >
+              <span className="gold-box-border" aria-hidden="true" />
+              <span className="gold-pulse-line" aria-hidden="true" />
+              <div
+                className="relative aspect-[16/10] luxury-image-frame overflow-hidden bg-muted group/img cursor-pointer"
+                onClick={() => openVehicleGallery(v, currentIndex)}
+                title="Click to view full photo gallery"
+              >
+                {currentMedia?.url ? (
+                  <img
+                    src={currentMedia.url}
+                    alt={v.title}
+                    loading="lazy"
+                    onError={(e) => {
+                      if (/bennington/i.test(v.title) || v.category === "boats") {
+                        e.currentTarget.src = "/vehicles/bennington-2022-boat.jpg";
+                      } else if (/suburban|chevrolet/i.test(v.title)) {
+                        e.currentTarget.src = "/vehicles/chevy-suburban-2022-01.png";
+                      }
+                    }}
+                    className="size-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.06]"
+                  />
+                ) : null}
+
+                {hasMultipleMedia && (
+                  <>
+                    <span className="absolute bottom-2.5 right-2.5 z-10 flex items-center gap-1.5 rounded-full border border-primary/40 bg-black/85 px-2.5 py-1 text-[11px] font-bold tracking-wider text-primary shadow-lg backdrop-blur-md pointer-events-none">
+                      <Images className="size-3.5 text-primary" />
+                      <span>
+                        Photo {currentIndex + 1} of {totalPhotos}
+                      </span>
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => prevVehicleMedia(e, v)}
+                      aria-label="Previous item"
+                      className="absolute left-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                    >
+                      <ChevronLeft className="size-4" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => nextVehicleMedia(e, v)}
+                      aria-label="Next item"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 z-20 flex size-8 items-center justify-center rounded-full border border-primary/40 bg-black/85 text-foreground opacity-90 transition-all hover:bg-primary hover:text-primary-foreground group-hover/img:opacity-100 shadow-md"
+                    >
+                      <ChevronRight className="size-4" />
+                    </button>
+                  </>
                 )}
               </div>
 
-              {SHOW_LOCATION && v.location && (
-                <p className="mt-4 flex items-center gap-2 text-[13px] text-muted-foreground/85">
-                  <MapPin className="size-3.5 text-primary" />
-                  {v.location}
-                </p>
-              )}
-            </div>
-          </article>
-        ))}
+              <div
+                className="flex flex-1 flex-col p-5 sm:p-6 cursor-pointer"
+                onClick={() => openVehicleGallery(v, currentIndex)}
+              >
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1 basis-28">
+                    <h3 className="font-display text-xl font-normal leading-tight tracking-[-0.01em] transition-colors duration-300 group-hover:text-primary sm:text-2xl">
+                      {v.title}
+                    </h3>
+                    {v.subtitle && <p className="mt-1 truncate text-[13px] text-muted-foreground/80">{v.subtitle}</p>}
+                  </div>
+                  {SHOW_ENTRY_FEE && (
+                    <div className="shrink-0 text-right">
+                      <p className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/85 sm:text-[11px]">
+                        Entry
+                      </p>
+                      <p className="font-display text-xl font-medium text-primary sm:text-2xl drop-shadow-[0_1px_8px_rgba(190,149,67,0.3)]">{money(v.entryFee)}</p>
+                    </div>
+                  )}
+                </div>
+
+                {SHOW_LOCATION && v.location && (
+                  <p className="mt-4 flex items-center gap-2 text-[13px] text-muted-foreground/85">
+                    <MapPin className="size-3.5 text-primary" />
+                    {v.location}
+                  </p>
+                )}
+              </div>
+            </article>
+          );
+        })}
       </div>
 
       {items !== null && filtered.length === 0 && (
@@ -124,6 +223,11 @@ export function VehicleInventory() {
         </div>
       )}
 
+      <PropertyGalleryModal
+        listing={galleryListing}
+        initialIndex={galleryInitialIndex}
+        onClose={() => setGalleryListing(null)}
+      />
     </section>
   );
 }

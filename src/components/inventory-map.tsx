@@ -3,7 +3,6 @@ import type { Listing } from "@/data/listings";
 import { zipCoordinates } from "@/data/zip-coordinates";
 import "leaflet/dist/leaflet.css";
 
-const markerPrice = (listing: Listing) => `$${new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(Number(listing.entry.replace(/[^\d.]/g, "")) || 0)}`;
 const escape = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] ?? c);
 // Listings have ZIP codes rather than street addresses. Spread shared-ZIP pins slightly so all remain selectable.
 function position(listing: Listing, items: Listing[]): [number, number] | null {
@@ -15,6 +14,8 @@ function position(listing: Listing, items: Listing[]): [number, number] | null {
   const angle = (index / shared.length) * Math.PI * 2;
   return [center[0] + Math.sin(angle) * .032, center[1] + Math.cos(angle) * .038];
 }
+
+const markerIconHtml = `<div class="inventory-marker-inner"><img src="/favicon.png" alt="" class="inventory-marker-favicon" /></div>`;
 
 export function InventoryMap({ listings, selectedId, onSelect }: { listings: Listing[]; selectedId: number | null; onSelect: (id: number) => void }) {
   const container = useRef<HTMLDivElement>(null);
@@ -33,7 +34,15 @@ export function InventoryMap({ listings, selectedId, onSelect }: { listings: Lis
       const L = await import("leaflet");
       if (cancelled || !container.current) return;
       leafletRef.current = L;
-      const map = L.map(container.current, { zoomControl: false, scrollWheelZoom: false, maxZoom: 18, minZoom: 3 }).setView([36.5, -91], 5);
+      const map = L.map(container.current, {
+        zoomControl: false,
+        scrollWheelZoom: true,
+        doubleClickZoom: true,
+        touchZoom: true,
+        boxZoom: true,
+        maxZoom: 18,
+        minZoom: 3,
+      }).setView([36.5, -91], 5);
       mapRef.current = map;
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19 }).addTo(map);
       L.control.zoom({ position: "bottomleft" }).addTo(map);
@@ -61,8 +70,17 @@ export function InventoryMap({ listings, selectedId, onSelect }: { listings: Lis
       const coord = position(listing, items);
       if (!coord) return;
       coords.push(coord);
-      const marker = L.marker(coord, { icon: L.divIcon({ html: `<span>${markerPrice(listing)}</span>`, className: `inventory-marker${listing.id === selectedId ? " inventory-marker-selected" : ""}`, iconSize: [48, 48], iconAnchor: [24, 24] }) });
-      marker.bindPopup(`<div class="inventory-popup">${listing.image ? `<img src="${escape(listing.image)}" alt=""/>` : ""}<div class="inventory-popup-body"><small>ENTRY ${escape(listing.entry)}</small><strong>${escape(listing.city)}, ${escape(listing.state)} ${escape(listing.zip)}</strong><span>${escape(listing.beds)} beds · ${escape(listing.baths)} baths · ${escape(listing.area)} sq ft</span><em>Approximate ZIP-area location</em></div></div>`, { maxWidth: 260, minWidth: 220 });
+      const isSelected = listing.id === selectedId;
+      const marker = L.marker(coord, {
+        icon: L.divIcon({
+          html: markerIconHtml,
+          className: `inventory-marker${isSelected ? " inventory-marker-selected" : ""}`,
+          iconSize: [36, 36],
+          iconAnchor: [18, 18],
+          popupAnchor: [0, -18],
+        }),
+      });
+      marker.bindPopup(`<div class="inventory-popup">${listing.image ? `<img src="${escape(listing.image)}" alt=""/>` : ""}<div class="inventory-popup-body"><strong>${escape(listing.city)}, ${escape(listing.state)} ${escape(listing.zip)}</strong><span>${escape(listing.beds)} beds · ${escape(listing.baths)} baths · ${escape(listing.area)} sq ft</span><em>Approximate ZIP-area location</em></div></div>`, { maxWidth: 260, minWidth: 220 });
       marker.on("click", () => { callbackRef.current(listing.id); map.flyTo(coord, Math.max(map.getZoom(), 8), { duration: .6 }); });
       markersRef.current.set(listing.id, marker);
       marker.addTo(layer);
@@ -77,7 +95,18 @@ export function InventoryMap({ listings, selectedId, onSelect }: { listings: Lis
     if (!L || !map) return;
     markersRef.current.forEach((marker, id) => {
       const listing = listings.find((item) => item.id === id);
-      if (listing) marker.setIcon(L.divIcon({ html: `<span>${markerPrice(listing)}</span>`, className: `inventory-marker${id === selectedId ? " inventory-marker-selected" : ""}`, iconSize: [48, 48], iconAnchor: [24, 24] }));
+      if (listing) {
+        const isSelected = id === selectedId;
+        marker.setIcon(
+          L.divIcon({
+            html: markerIconHtml,
+            className: `inventory-marker${isSelected ? " inventory-marker-selected" : ""}`,
+            iconSize: [36, 36],
+            iconAnchor: [18, 18],
+            popupAnchor: [0, -18],
+          })
+        );
+      }
     });
     if (selectedId != null) {
       const marker = markersRef.current.get(selectedId);

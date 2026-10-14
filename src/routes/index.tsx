@@ -725,14 +725,6 @@ function Homepage() {
                         {listing.area && ` · ${listing.area} sq ft`}
                       </p>
                     )}
-
-                    {listing.lister && (
-                      <div className="mt-2.5 border-t border-primary/15 pt-2.5">
-                        <span className="text-[11px] font-bold uppercase tracking-wider text-primary">
-                          {listing.lister}
-                        </span>
-                      </div>
-                    )}
                   </div>
                 </article>
               );
